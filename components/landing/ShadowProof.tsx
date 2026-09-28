@@ -10,7 +10,7 @@ export function ShadowProof() {
 
   return (
     <section id="proof" aria-labelledby="proof-title" className="border-t border-line">
-      <div className="mx-auto max-w-[1200px] px-5 py-28 sm:px-8 md:py-40">
+      <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-28 lg:py-40">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <p className="label">Shadow mode</p>
           <ExampleTag>Example data · illustrative 30-day run</ExampleTag>
@@ -24,18 +24,18 @@ export function ShadowProof() {
           have caught.
         </p>
 
-        <div className="mt-20 grid gap-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
-          <div className="space-y-12">
+        <div className="mt-12 grid gap-12 sm:mt-16 sm:gap-16 lg:mt-20 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+          <div className="grid grid-cols-2 gap-6 sm:block sm:space-y-12">
             <div>
               <p className="label">Approve every send, close and write</p>
-              <p className="mt-2 font-mono text-[clamp(2.75rem,7vw,5rem)] leading-none tracking-[-0.04em] text-ink-3">
+              <p className="mt-2 font-mono text-[clamp(2.25rem,9vw,5rem)] leading-none tracking-[-0.04em] text-ink-3">
                 <CountUp value={R.baselineReviews} />
               </p>
               <p className="mt-2 text-sm text-ink-3">reviews</p>
             </div>
             <div>
               <p className="label !text-hold">With Abeyance</p>
-              <p className="mt-2 font-mono text-[clamp(2.75rem,7vw,5rem)] leading-none tracking-[-0.04em] text-hold">
+              <p className="mt-2 font-mono text-[clamp(2.25rem,9vw,5rem)] leading-none tracking-[-0.04em] text-hold">
                 <CountUp value={R.abeyanceReviews} />
               </p>
               <p className="mt-2 text-sm text-ink-3">reviews, over the same actions</p>

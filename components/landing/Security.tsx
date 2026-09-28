@@ -28,16 +28,16 @@ const POINTS = [
 export function Security() {
   return (
     <section id="security" aria-labelledby="sec-title" className="border-t border-line bg-sunken/60">
-      <div className="mx-auto max-w-[1200px] px-5 py-28 sm:px-8 md:py-40">
+      <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-28 lg:py-40">
         <p className="label">Security &amp; audit</p>
         <h2 id="sec-title" className="display-tight mt-5 max-w-[17ch] text-[clamp(2.2rem,5.5vw,4.25rem)] font-[300]">
           Built like a control system, not a chatbot.
         </h2>
-        <dl className="mt-20 grid gap-x-16 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+        <dl className="mt-12 grid gap-x-16 gap-y-10 sm:mt-16 sm:gap-y-12 md:grid-cols-2 lg:mt-20 lg:grid-cols-3">
           {POINTS.map((p, i) => (
             <div key={p.title} className="border-t border-line pt-6">
               <dt className="flex items-baseline gap-4">
-                <span className="font-mono text-xs text-ink-4">{String(i + 1).padStart(2, "0")}</span>
+                <span className="w-5 shrink-0 font-mono text-xs text-ink-4">{String(i + 1).padStart(2, "0")}</span>
                 <span className="text-lg font-[480] tracking-[-0.01em]">{p.title}</span>
               </dt>
               <dd className="mt-3 pl-9 leading-relaxed text-ink-2">{p.body}</dd>

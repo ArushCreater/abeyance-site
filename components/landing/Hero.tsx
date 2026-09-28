@@ -4,15 +4,15 @@ import { SIGN_IN_URL } from "@/lib/site";
 
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="relative mx-auto max-w-[1200px] px-5 pb-20 pt-36 sm:px-8 sm:pt-44 md:pb-28">
-      <p className="label mb-8 flex items-center gap-3">
+    <section aria-labelledby="hero-title" className="relative mx-auto max-w-[1200px] px-5 pb-16 pt-[calc(7rem+env(safe-area-inset-top,0px))] sm:px-8 sm:pb-20 sm:pt-40 lg:pb-28 lg:pt-44">
+      <p className="label mb-6 flex items-center gap-3 sm:mb-8">
         <span aria-hidden className="h-px w-8 bg-hold" />
         The commit control for AI agents
       </p>
 
       <h1
         id="hero-title"
-        className="display-tight text-[clamp(3rem,10vw,8.25rem)] font-[280] text-ink"
+        className="display-tight text-[clamp(2.9rem,12.5vw,8.25rem)] font-[280] text-ink"
       >
         <SuspendedText text="Let agents act." className="block" delay={0.05} />
         <span className="block">
@@ -21,23 +21,23 @@ export function Hero() {
         </span>
       </h1>
 
-      <div className="mt-12 grid gap-10 md:mt-16 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-        <p className="max-w-[48ch] text-lg leading-relaxed text-ink-2 sm:text-xl">
+      <div className="mt-9 grid gap-8 sm:mt-12 sm:gap-10 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+        <p className="max-w-[48ch] text-[1.0625rem] leading-relaxed text-ink-2 sm:text-xl">
           Before an agent sends the email, writes the CRM record or closes the ticket, Abeyance reads what it’s
           about to do and scores the risk. Most actions go straight through. The few that matter wait for one
           click from the right person.
         </p>
-        <div className="flex flex-wrap items-center gap-3">
-          <a href="#partner" className={buttonClass("primary")}>
+        <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-center">
+          <a href="#partner" className={buttonClass("primary", "!h-12 sm:!h-11")}>
             Become a design partner <span aria-hidden className={arrowClass}>→</span>
           </a>
-          <a href={SIGN_IN_URL} className={buttonClass("ghost")}>
+          <a href={SIGN_IN_URL} className={buttonClass("ghost", "!h-12 sm:!h-11")}>
             Sign in <span aria-hidden className={arrowClass}>↗</span>
           </a>
         </div>
       </div>
 
-      <p className="mt-16 font-mono text-xs text-ink-3">Humans only for the actions that matter.</p>
+      <p className="mt-12 font-mono text-xs text-ink-3 sm:mt-16">Humans only for the actions that matter.</p>
     </section>
   );
 }

@@ -19,7 +19,7 @@ export function PartnerCTA() {
 
   return (
     <section id="partner" aria-labelledby="partner-title" className="border-t border-line">
-      <div className="mx-auto grid max-w-[1200px] gap-16 px-5 py-28 sm:px-8 md:py-40 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
+      <div className="mx-auto grid max-w-[1200px] gap-12 px-5 py-20 sm:gap-16 sm:px-8 sm:py-28 lg:py-40 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
         <div>
           <p className="label">Design partners</p>
           <h2 id="partner-title" className="display-tight mt-5 text-[clamp(2.4rem,6.5vw,5rem)] font-[300]">
@@ -51,7 +51,7 @@ export function PartnerCTA() {
                 key="form"
                 onSubmit={onSubmit}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.35 } }}
-                className="space-y-6 rounded-2xl border border-line bg-raised/60 p-6 sm:p-8"
+                className="space-y-5 rounded-2xl border border-line bg-raised/60 p-5 sm:space-y-6 sm:p-8"
                 aria-label="Design partner request"
               >
                 <Field label="Work email" id="email">
@@ -73,7 +73,7 @@ export function PartnerCTA() {
                 <Field label="What should your agents never do without asking?" id="never" optional>
                   <textarea id="never" name="never" rows={3} className={`${inputClass} h-auto resize-none py-3`} />
                 </Field>
-                <button type="submit" className={buttonClass("primary", "w-full")}>
+                <button type="submit" className={buttonClass("primary", "!h-12 w-full")}>
                   Request a conversation <span aria-hidden className={arrowClass}>→</span>
                 </button>
                 <p className="text-center text-xs text-ink-3">Preview build. This form doesn’t send anything yet.</p>
@@ -104,7 +104,7 @@ export function PartnerCTA() {
 }
 
 const inputClass =
-  "block h-11 w-full rounded-lg border border-line-strong bg-bg px-3.5 text-ink placeholder:text-ink-4 transition-colors hover:border-ink-4 focus:border-hold focus:outline-none";
+  "block h-12 w-full rounded-lg border border-line-strong bg-bg px-3.5 text-base text-ink sm:h-11 placeholder:text-ink-4 transition-colors hover:border-ink-4 focus:border-hold focus:outline-none";
 
 function Field({ label, id, optional, children }: { label: string; id: string; optional?: boolean; children: React.ReactNode }) {
   return (

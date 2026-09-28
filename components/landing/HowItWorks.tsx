@@ -17,7 +17,7 @@ export function HowItWorks() {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
 
   return (
-    <section id="how" aria-labelledby="how-title" className="mx-auto max-w-[1200px] px-5 py-28 sm:px-8 md:py-40">
+    <section id="how" aria-labelledby="how-title" className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-28 lg:py-40">
       <p className="label">How it works</p>
       <h2 id="how-title" className="display-tight mt-5 max-w-[15ch] text-[clamp(2.2rem,5.5vw,4.25rem)] font-[300]">
         Five steps between intent and commit.
@@ -27,11 +27,11 @@ export function HowItWorks() {
         written down, and for most actions that takes well under half a second.
       </p>
 
-      <ol ref={listRef} className="relative mt-20 md:mt-28">
-        <span aria-hidden className="absolute bottom-0 left-[0.6rem] top-2 w-px bg-line md:left-[0.95rem]" />
+      <ol ref={listRef} className="relative mt-14 sm:mt-20 lg:mt-28">
+        <span aria-hidden className="absolute bottom-0 left-[0.6rem] top-2 w-px bg-line lg:left-[0.95rem]" />
         <motion.span
           aria-hidden
-          className="absolute bottom-0 left-[0.6rem] top-2 w-px origin-top bg-ink-3 md:left-[0.95rem]"
+          className="absolute bottom-0 left-[0.6rem] top-2 w-px origin-top bg-ink-3 lg:left-[0.95rem]"
           style={{ scaleY: progress }}
         />
         <Step n="01" title="Propose" body="Before calling the tool, the agent calls gate.propose() with the tool, arguments, its own identity, the user it's acting for, and context.">
@@ -75,11 +75,11 @@ function Step({ n, title, body, children, last }: { n: string; title: string; bo
   const ref = useRef<HTMLLIElement>(null);
   const seen = useInView(ref, { once: true, margin: "-25% 0px" });
   return (
-    <li ref={ref} className={`relative grid grid-cols-1 gap-8 pl-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16 md:pl-16 ${last ? "" : "pb-24 md:pb-32"}`}>
-      <span aria-hidden className="absolute left-0 top-1.5 flex h-[1.25rem] w-[1.25rem] items-center justify-center md:h-8 md:w-8 md:top-0">
+    <li ref={ref} className={`relative grid grid-cols-1 gap-6 pl-10 sm:gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 lg:pl-16 ${last ? "" : "pb-16 sm:pb-24 lg:pb-32"}`}>
+      <span aria-hidden className="absolute left-0 top-1.5 flex h-[1.25rem] w-[1.25rem] items-center justify-center lg:top-0 lg:h-8 lg:w-8">
         <span className="absolute inset-0 rounded-full border border-line bg-bg" />
         <motion.span
-          className="absolute inset-[5px] rounded-full bg-ink md:inset-[11px]"
+          className="absolute inset-[5px] rounded-full bg-ink lg:inset-[11px]"
           initial={{ scale: 0 }}
           animate={{ scale: seen ? 1 : 0 }}
           transition={spring.settle}
@@ -87,16 +87,16 @@ function Step({ n, title, body, children, last }: { n: string; title: string; bo
       </span>
       <div>
         <p className="font-mono text-xs text-ink-3">{n}</p>
-        <h3 className="mt-2 font-display text-2xl font-[420] tracking-[-0.02em] [font-variation-settings:'wdth'_86] md:text-3xl">{title}</h3>
-        <p className="mt-4 max-w-[42ch] leading-relaxed text-ink-2">{body}</p>
+        <h3 className="mt-2 font-display text-2xl font-[420] tracking-[-0.02em] [font-variation-settings:'wdth'_86] lg:text-3xl">{title}</h3>
+        <p className="mt-3 max-w-[52ch] leading-relaxed text-ink-2 sm:mt-4 lg:max-w-[42ch]">{body}</p>
       </div>
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={seen ? { opacity: 1, y: 0 } : undefined}
         transition={{ ...spring.settle, delay: 0.1 }}
-        className="min-w-0"
+        className="-ml-10 min-w-0 sm:ml-0"
       >
-        <div className="rounded-xl border border-line bg-raised/60 p-5 sm:p-6">{children}</div>
+        <div className="rounded-xl border border-line bg-raised p-4 sm:bg-raised/60 sm:p-6">{children}</div>
       </motion.div>
     </li>
   );
@@ -110,12 +110,12 @@ const C = ({ children }: { children: ReactNode }) => <span className="text-ink-4
 
 function ProposeArtifact() {
   return (
-    <pre className="overflow-x-auto font-mono text-[12.5px] leading-[1.75] text-ink-3" aria-label="Python SDK example">
+    <pre className="overflow-x-auto font-mono text-[11.5px] leading-[1.75] text-ink-3 sm:text-[12.5px]" aria-label="Python SDK example">
       <C># LangGraph tool node, Python SDK</C>
       {"\n"}
       <K>decision</K> = <K>gate</K>.propose(
       {"\n"}    tool=<S>&quot;email.send&quot;</S>,
-      {"\n"}    args={"{"}<S>&quot;to&quot;</S>: customer.email, <S>&quot;body&quot;</S>: draft{"}"},
+      {"\n"}    args={"{"}<S>&quot;to&quot;</S>: email, <S>&quot;body&quot;</S>: draft{"}"},
       {"\n"}    agent=<S>&quot;claims-assist&quot;</S>,
       {"\n"}    on_behalf_of=<S>&quot;p.raman&quot;</S>,
       {"\n"}    context={"{"}<S>&quot;customer_id&quot;</S>: <S>&quot;C-20417&quot;</S>{"}"},
@@ -126,7 +126,8 @@ function ProposeArtifact() {
       {"\n"}    send(draft)
       {"\n"}
       <K>elif</K> decision.outcome == <S>&quot;HOLD&quot;</S>:
-      {"\n"}    <K>await</K> decision.wait()  <C># approved → send, denied/timeout → reason</C>
+      {"\n"}    <C># approved → send; denied → reason</C>
+      {"\n"}    <K>await</K> decision.wait()
     </pre>
   );
 }
@@ -191,7 +192,7 @@ function RiskArtifact() {
       </div>
       <ul className="mt-6 space-y-3" aria-label="Risk factors">
         {FACTORS.map(([label, v], i) => (
-          <li key={label} className="grid grid-cols-[minmax(0,10rem)_minmax(0,1fr)_2.5rem] items-center gap-4 text-sm">
+          <li key={label} className="grid grid-cols-[minmax(0,9rem)_minmax(0,1fr)_2.25rem] items-center gap-3 text-sm sm:grid-cols-[minmax(0,10rem)_minmax(0,1fr)_2.5rem] sm:gap-4">
             <span className="truncate text-ink-2">{label}</span>
             <span className="relative h-[3px] overflow-hidden rounded-full bg-line">
               <motion.span
@@ -261,19 +262,42 @@ function LedgerArtifact() {
     "#18243  09:41:05  decision.allow  ticket.update  support-triage  risk=0.06",
     "#18244  09:41:07  decision.hold   email.send     claims-assist   risk=0.71  → a.okafor",
   ];
+  const entries = [
+    { seq: "#18243", time: "09:41:05", event: "decision.allow", detail: "ticket.update · support-triage · risk 0.06" },
+    { seq: "#18244", time: "09:41:07", event: "decision.hold", detail: "email.send · claims-assist · risk 0.71 → a.okafor" },
+  ];
   return (
-    <div className="overflow-x-auto font-mono text-[12px] leading-[1.9]">
-      <div className="min-w-[42rem]">
-        {lines.map((l) => (
-          <p key={l} className="whitespace-pre text-ink-3">
-            {l}
-          </p>
+    <>
+      {/* Phones: one entry per block. */}
+      <ol className="space-y-3 font-mono text-[11.5px] leading-relaxed sm:hidden" aria-label="Ledger entries">
+        {entries.map((e) => (
+          <li key={e.seq} className="text-ink-3">
+            <span className="text-ink-4">{e.seq} · {e.time}</span>
+            <br />
+            <span className="text-ink-2">{e.event}</span> {e.detail}
+          </li>
         ))}
-        <p className="whitespace-pre text-ink">
-          <Typewriter text="#18245  09:43:52  hold.approved   email.send     claims-assist   by=Maya Okafor via slack" cps={70} delay={0.4} />
-        </p>
-        <p className="mt-3 whitespace-pre text-ink-4">prev=3fa9…c1d0  hash=91be…07aa  chain ✓</p>
+        <li className="text-ink">
+          <span className="text-ink-4">#18245 · 09:43:52</span>
+          <br />
+          <Typewriter text="hold.approved email.send · by Maya Okafor via slack" cps={60} delay={0.4} />
+        </li>
+        <li className="border-t border-line pt-3 text-ink-4">prev=3fa9…c1d0 hash=91be…07aa chain ✓</li>
+      </ol>
+      {/* Larger screens: the raw log. */}
+      <div className="hidden overflow-x-auto font-mono text-[12px] leading-[1.9] sm:block">
+        <div className="min-w-[42rem]">
+          {lines.map((l) => (
+            <p key={l} className="whitespace-pre text-ink-3">
+              {l}
+            </p>
+          ))}
+          <p className="whitespace-pre text-ink">
+            <Typewriter text="#18245  09:43:52  hold.approved   email.send     claims-assist   by=Maya Okafor via slack" cps={70} delay={0.4} />
+          </p>
+          <p className="mt-3 whitespace-pre text-ink-4">prev=3fa9…c1d0  hash=91be…07aa  chain ✓</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

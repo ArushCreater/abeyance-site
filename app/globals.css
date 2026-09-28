@@ -55,6 +55,9 @@ html {
 
 body {
   background: var(--color-bg);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   font-family: var(--font-sans);
   font-optical-sizing: auto;
   font-variation-settings: "wdth" 100;
@@ -217,4 +220,17 @@ input[type="range"].threshold:focus-visible::-webkit-slider-thumb {
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--color-line-strong) transparent;
+}
+
+/* Touch: no double-tap zoom delay on controls; anchored sections clear the fixed header. */
+a,
+button,
+input,
+select,
+textarea,
+label {
+  touch-action: manipulation;
+}
+section[id] {
+  scroll-margin-top: calc(3.5rem + env(safe-area-inset-top, 0px));
 }

@@ -29,7 +29,7 @@ export function ThresholdStream() {
 
   return (
     <section id="demo" ref={ref} aria-labelledby="demo-title" className="relative border-y border-line bg-sunken/60">
-      <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8 md:py-32">
+      <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-24 lg:py-32">
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-8">
           <div>
             <p className="label flex items-center gap-2.5">
@@ -61,7 +61,7 @@ export function ThresholdStream() {
           </dl>
         </div>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:gap-14">
+        <div className="mt-10 grid gap-10 sm:mt-14 sm:gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:gap-14">
           {/* Proposed */}
           <div>
             <div className="label flex justify-between border-b border-line pb-3">
@@ -90,14 +90,14 @@ export function ThresholdStream() {
                 {looking ? "Time slows while you look" : `${pending.length} held`}
               </span>
             </div>
-            <div className="relative min-h-[12rem] pt-5 lg:min-h-[23.5rem]">
+            <div className="relative min-h-[10rem] pt-5 sm:min-h-[12rem] lg:min-h-[23.5rem]">
               <AnimatePresence>
                 {holds.map((h, i) => (
                   <HeldCard key={h.id} hold={h} index={i} onResolve={resolve} onGone={remove} />
                 ))}
               </AnimatePresence>
               {holds.length === 0 && (
-                <p className="absolute inset-x-0 top-16 text-center font-mono text-xs text-ink-4 lg:top-24">
+                <p className="absolute inset-x-0 top-12 text-center font-mono text-xs text-ink-4 sm:top-16 lg:top-24">
                   <span className="inline-block animate-suspend">Nothing held right now.</span>
                 </p>
               )}
@@ -242,14 +242,14 @@ function HeldCard({
                 <button
                   type="button"
                   onClick={() => onResolve(hold.id, "denied", "You")}
-                  className="h-7 rounded-full border border-line-strong px-3 text-xs text-ink-2 transition-colors hover:border-block/60 hover:text-ink"
+                  className="h-10 touch-manipulation rounded-full border border-line-strong px-4 text-sm text-ink-2 transition-colors hover:border-block/60 hover:text-ink sm:h-7 sm:px-3 sm:text-xs"
                 >
                   Deny
                 </button>
                 <button
                   type="button"
                   onClick={() => onResolve(hold.id, "approved", "You")}
-                  className="h-7 rounded-full bg-hold px-3 text-xs font-medium text-bg transition-transform hover:scale-[1.03] active:scale-95"
+                  className="h-10 touch-manipulation rounded-full bg-hold px-4 text-sm font-medium text-bg transition-transform hover:scale-[1.03] active:scale-95 sm:h-7 sm:px-3 sm:text-xs"
                 >
                   Approve
                 </button>

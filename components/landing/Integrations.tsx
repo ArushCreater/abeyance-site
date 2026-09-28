@@ -10,7 +10,7 @@ const ITEMS: { name: string; role: string; status: "v1" | "planned" }[] = [
 export function Integrations() {
   return (
     <section id="integrations" aria-labelledby="int-title" className="border-t border-line">
-      <div className="mx-auto grid max-w-[1200px] gap-14 px-5 py-28 sm:px-8 md:py-36 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-20 sm:gap-14 sm:px-8 sm:py-28 lg:py-36 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
         <div>
           <p className="label">Integrations</p>
           <h2 id="int-title" className="display-tight mt-5 max-w-[14ch] text-[clamp(2rem,4.5vw,3.25rem)] font-[300]">
