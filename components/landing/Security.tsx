@@ -1,3 +1,5 @@
+import { DOCS_URL } from "@/lib/site";
+
 const POINTS = [
   {
     title: "Append-only, hash-chained ledger",
@@ -33,6 +35,10 @@ export function Security() {
         <h2 id="sec-title" className="display-tight mt-5 max-w-[17ch] text-[clamp(2.2rem,5.5vw,4.25rem)] font-[300]">
           Built like a control system, not a chatbot.
         </h2>
+        <a href={`${DOCS_URL}/security`} className="group mt-6 inline-flex items-center gap-2 py-2 text-sm text-ink-2 transition-colors hover:text-ink">
+          <span className="h-px w-4 bg-hold transition-all duration-300 group-hover:w-6" aria-hidden />
+          Security in the docs <span aria-hidden>↗</span>
+        </a>
         <dl className="mt-12 grid gap-x-16 gap-y-10 sm:mt-16 sm:gap-y-12 md:grid-cols-2 lg:mt-20 lg:grid-cols-3">
           {POINTS.map((p, i) => (
             <div key={p.title} className="border-t border-line pt-6">

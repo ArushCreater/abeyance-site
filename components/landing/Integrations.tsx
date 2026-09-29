@@ -1,3 +1,5 @@
+import { DOCS_URL } from "@/lib/site";
+
 const ITEMS: { name: string; role: string; status: "v1" | "planned" }[] = [
   { name: "LangGraph", role: "Python SDK: gate.propose() as a tool wrapper or graph node", status: "v1" },
   { name: "MCP gateways", role: "External decision service behind the gateway’s policy hook, e.g. agentgateway", status: "v1" },
@@ -20,6 +22,10 @@ export function Integrations() {
             Use our SDK directly, or let your existing agent gateway call Abeyance for the decision. We make your
             gateway smarter rather than replacing it.
           </p>
+          <a href={`${DOCS_URL}/agents/overview`} className="group mt-6 inline-flex items-center gap-2 py-2 text-sm text-ink-2 transition-colors hover:text-ink">
+          <span className="h-px w-4 bg-hold transition-all duration-300 group-hover:w-6" aria-hidden />
+          Setup guides for each platform <span aria-hidden>↗</span>
+        </a>
         </div>
         <ul className="border-t border-line">
           {ITEMS.map((item) => (

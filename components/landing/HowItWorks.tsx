@@ -5,6 +5,7 @@ import { useRef, type ReactNode } from "react";
 import { CountUp } from "@/components/type/CountUp";
 import { Typewriter } from "@/components/type/Typewriter";
 import { spring } from "@/lib/motion";
+import { DOCS_URL } from "@/lib/site";
 
 /**
  * Five steps between intent and commit. A single example action — a refund
@@ -26,6 +27,12 @@ export function HowItWorks() {
         Abeyance sits in the path of the action. Nothing irreversible happens until a decision is made and
         written down, and for most actions that takes well under half a second.
       </p>
+      <div>
+        <a href={`${DOCS_URL}/how-decisions-work`} className="group mt-6 inline-flex items-center gap-2 py-2 text-sm text-ink-2 transition-colors hover:text-ink">
+          <span className="h-px w-4 bg-hold transition-all duration-300 group-hover:w-6" aria-hidden />
+          How a decision is made, in the docs <span aria-hidden>↗</span>
+        </a>
+      </div>
 
       <ol ref={listRef} className="relative mt-14 sm:mt-20 lg:mt-28">
         <span aria-hidden className="absolute bottom-0 left-[0.6rem] top-2 w-px bg-line lg:left-[0.95rem]" />
