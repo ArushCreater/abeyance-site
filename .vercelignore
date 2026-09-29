@@ -1,0 +1,9 @@
+# Never upload local environment files with a CLI deploy. Production reads its
+# settings from Vercel's environment variables only. (A CLI deploy once shipped
+# .env, which pointed production at the dev database schema.)
+.env
+.env.*
+!.env.example
+.vercel
+.next
+node_modules
