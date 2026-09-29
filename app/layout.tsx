@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
   description:
     "Abeyance scores every irreversible agent action before it happens. Most go straight through; the risky few wait for one-click approval. Humans only for the actions that matter.",
-  icons: { apple: "/icons/apple-touch-icon.png" },
+  // Icons come from the file conventions: app/icon.svg, app/favicon.ico, app/apple-icon.png.
 };
 
 export const viewport: Viewport = {
