@@ -1,30 +1,34 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Logo } from "@/components/brand/Logo";
+import { ScrollLogo } from "@/components/brand/ScrollLogo";
 import { arrowClass, buttonClass } from "@/components/ui/button";
 import { DOCS_URL, SIGN_IN_URL } from "@/lib/site";
 import { spring } from "@/lib/motion";
 
 const LINKS = [
-  { href: "#how", label: "How it works" },
-  { href: "#proof", label: "Proof" },
-  { href: "#security", label: "Security" },
+  { href: "/#how", label: "How it works" },
+  { href: "/#proof", label: "Proof" },
+  { href: "/#security", label: "Security" },
 ];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
-  // In-page links: close the menu (which unlocks scrolling), then glide to the section.
+  // Section links on the home page: close the menu (which unlocks scrolling), then glide there.
+  // Anywhere else they're ordinary links to /#section.
   const go = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     setOpen(false);
-    if (!href.startsWith("#")) return;
+    if (!href.startsWith("/#") || pathname !== "/") return;
     e.preventDefault();
+    const hash = href.slice(1);
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
-        document.querySelector(href)?.scrollIntoView({ behavior: "smooth", block: "start" });
-        history.replaceState(null, "", href);
+        document.querySelector(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", hash);
       }),
     );
   };
@@ -49,7 +53,7 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md">
       <nav aria-label="Main" className="mx-auto flex h-14 max-w-[1200px] items-center justify-between gap-3 px-5 sm:h-16 sm:px-8">
-        <Logo className="-my-2 py-2.5" />
+        <ScrollLogo className="-my-2 py-2.5" />
         <div className="flex items-center gap-1 sm:gap-2">
           <ul className="hidden items-center gap-1 lg:flex">
             {LINKS.map((l) => (
@@ -68,7 +72,7 @@ export function SiteHeader() {
           <a href={SIGN_IN_URL} className="hidden rounded-full px-3 py-2 text-sm text-ink-2 transition-colors hover:text-ink sm:inline-flex">
             Sign in
           </a>
-          <a href="#partner" className={buttonClass("primary", "!h-9 whitespace-nowrap !px-4 max-sm:!hidden")}>
+          <a href="/partners" className={buttonClass("primary", "!h-9 whitespace-nowrap !px-4 max-sm:!hidden")}>
             Design partners <span aria-hidden className={arrowClass}>→</span>
           </a>
           <button
@@ -113,13 +117,13 @@ export function SiteHeader() {
                   >
                     {l.label}
                     <span aria-hidden className="font-sans text-base text-ink-4">
-                      {l.href.startsWith("#") ? "↓" : "↗"}
+                      {l.href.startsWith("/#") ? "↓" : "↗"}
                     </span>
                   </a>
                 </motion.li>
               ))}
             </ul>
-            <a href="#partner" onClick={(e) => go(e, "#partner")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
+            <a href="/partners" onClick={(e) => go(e, "/partners")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
               Become a design partner <span aria-hidden className={arrowClass}>→</span>
             </a>
             <p className="mt-6 font-mono text-xs text-ink-3">Humans only for the actions that matter.</p>

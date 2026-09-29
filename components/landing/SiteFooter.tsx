@@ -2,11 +2,11 @@ import { Logo } from "@/components/brand/Logo";
 import { DOCS_URL, SIGN_IN_URL } from "@/lib/site";
 
 const LINKS = [
-  { href: "#how", label: "How it works" },
-  { href: "#security", label: "Security" },
+  { href: "/#how", label: "How it works" },
+  { href: "/#security", label: "Security" },
   { href: DOCS_URL, label: "Docs" },
   { href: SIGN_IN_URL, label: "Sign in" },
-  { href: "#partner", label: "Design partners" },
+  { href: "/partners", label: "Design partners" },
 ];
 
 export function SiteFooter() {

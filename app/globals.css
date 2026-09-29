@@ -68,10 +68,13 @@ body {
   color: var(--color-bg);
 }
 
-:focus-visible {
-  outline: 1px solid var(--color-hold);
-  outline-offset: 3px;
-  border-radius: 2px;
+/* In a layer, so a component's own focus style (e.g. the partner form's underline) can replace it. */
+@layer base {
+  :focus-visible {
+    outline: 1px solid var(--color-hold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 }
 
 /* ---------------------------------------------------------------- */

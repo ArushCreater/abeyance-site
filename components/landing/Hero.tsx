@@ -38,7 +38,7 @@ export function Hero() {
             click from the right person.
           </p>
           <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-center">
-            <a href="#partner" className={buttonClass("primary", "!h-12 sm:!h-11")}>
+            <a href="/partners" className={buttonClass("primary", "!h-12 sm:!h-11")}>
               Become a design partner <span aria-hidden className={arrowClass}>→</span>
             </a>
             <a href={SIGN_IN_URL} className={buttonClass("ghost", "!h-12 sm:!h-11")}>
