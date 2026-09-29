@@ -25,6 +25,7 @@ export function SuspendedText({
   holdMs = 2200,
   hesitate,
   replayOnHover = false,
+  staysAmber = false,
   axis,
   className = "",
 }: {
@@ -36,6 +37,8 @@ export function SuspendedText({
   /** Index of the letter that hesitates. Defaults to the second letter. */
   hesitate?: number;
   replayOnHover?: boolean;
+  /** Keep the amber after the word settles, instead of fading back to ink. */
+  staysAmber?: boolean;
   /**
    * Optional variable-font moment: axis settings while held vs at rest,
    * e.g. { held: "'wght' 200, 'wdth' 75", rest: "'wght' 300, 'wdth' 82" }.
@@ -130,8 +133,8 @@ export function SuspendedText({
             aria-hidden
             className="pointer-events-none absolute inset-0 select-none text-hold"
             initial={{ opacity: 0 }}
-            animate={{ opacity: held ? 1 : 0 }}
-            transition={{ duration: held ? 0.5 : 1.1, ease: "easeInOut", delay: held ? i * 0.03 : 0.1 + i * 0.03 }}
+            animate={{ opacity: held || (staysAmber && phase === "settle") ? 1 : 0 }}
+            transition={{ duration: held || staysAmber ? 0.5 : 1.1, ease: "easeInOut", delay: held || staysAmber ? i * 0.03 : 0.1 + i * 0.03 }}
           >
             {ch}
           </motion.span>
