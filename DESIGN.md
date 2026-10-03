@@ -47,6 +47,11 @@ A force-directed canvas (d3-force), in the spirit of Obsidian's graph view. Agen
 
 4px base unit. Max width 1200px. Section rhythm 112–160px vertically. Body copy is capped around 48–60ch. No bento grids: lists with hairlines, generous negative space, and one focal element per section.
 
+## Footer and long-form pages
+
+- **Footer:** one calm display line ("Nothing irreversible without a reason."), then the threshold: a hairline scale from allow to block with a gap in it, and one amber dot suspended in the gap (springs to draw in, then the CSS float and breathe). That dot is the footer's only amber. Links sit in hairline lists. The example ledger line carries an `ExampleTag`.
+- **Legal and trust pages:** a reading column of about 40rem, a sticky hairline contents list on desktop (a `<details>` on mobile), numbered section headings in the display face, and a dashed draft banner. Placeholders are mono `ink-2` with a dotted underline, never amber.
+
 ## Accessibility
 
 Skip link, landmarks, visible amber focus rings, `aria-live` for new holds and receipts, keyboard approval (A / D / J / K), a table view for the chart, labelled sliders, and a `role=switch` for policy enforcement. Every animated text has a screen-reader copy. The emergency stop confirms with press-and-hold (pointer, Enter or Space; ⇧⌘. opens it anywhere). The agent map has a described canvas plus a list view; charts on agent pages have hidden data tables.

@@ -1,5 +1,7 @@
 /** Where the console lives. Set NEXT_PUBLIC_CONSOLE_URL per deployment. */
 export const CONSOLE_URL = (process.env.NEXT_PUBLIC_CONSOLE_URL?.trim() || "http://localhost:3001").replace(/\/$/, "");
 export const SIGN_IN_URL = `${CONSOLE_URL}/login`;
+/** This marketing site, for the sitemap, robots and security.txt. Set NEXT_PUBLIC_SITE_URL per deployment. */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://abeyance-iota.vercel.app").replace(/\/$/, "");
 /** The documentation site. */
 export const DOCS_URL = (process.env.NEXT_PUBLIC_DOCS_URL?.trim() || "https://abeyance-docs.vercel.app").replace(/\/$/, "");
