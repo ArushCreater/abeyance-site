@@ -5,12 +5,11 @@ import Link from "next/link";
 import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { arrowClass, buttonClass } from "@/components/ui/button";
 import { spring } from "@/lib/motion";
+import { STAGES, TEAMS, validatePartner, type PartnerErrors } from "@/lib/partners";
 
-const TEAMS = ["AI / CoE", "Security", "Platform", "Operations", "Other"];
-const STAGES = ["Exploring", "Piloting", "In production"];
 const NEVER = ["Promise a refund", "Change bank details", "Email a regulator", "Close a complaint", "Delete records"];
 
-type Errors = Partial<Record<"name" | "email" | "company", string>>;
+type Errors = PartnerErrors;
 
 export function PartnerForm() {
   const reduce = useReducedMotion();
@@ -20,33 +19,58 @@ export function PartnerForm() {
   const [team, setTeam] = useState<string | null>(null);
   const [stage, setStage] = useState<string | null>(null);
   const [never, setNever] = useState("");
+  const [website, setWebsite] = useState("");
   const [errors, setErrors] = useState<Errors>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const form = useRef<HTMLFormElement>(null);
 
-  const validate = (): Errors => {
-    const e: Errors = {};
-    if (!name.trim()) e.name = "Tell us who we’re talking to.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) e.email = "That doesn’t look like an email address.";
-    if (!company.trim()) e.company = "Which company is this for?";
-    return e;
-  };
-
-  const onSubmit = (ev: FormEvent) => {
-    ev.preventDefault();
-    const e = validate();
+  const showErrors = (e: Errors) => {
     setErrors(e);
     const first = (Object.keys(e) as (keyof Errors)[])[0];
-    if (first) {
-      form.current?.querySelector<HTMLInputElement>(`[name="${first}"]`)?.focus();
-      return;
+    if (first) form.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+  };
+
+  const onSubmit = async (ev: FormEvent) => {
+    ev.preventDefault();
+    if (sending) return;
+    setFormError(null);
+    const check = validatePartner({ name, email, company, team, stage, never });
+    if (!check.ok) return showErrors(check.errors);
+    setErrors({});
+
+    setSending(true);
+    try {
+      const res = await fetch("/api/partners", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...check.value, website }),
+      });
+      const data: { ok?: boolean; errors?: Errors } | null = await res.json().catch(() => null);
+      if (res.ok && data?.ok) {
+        setSent(true);
+        requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }));
+      } else if (res.status === 400 && data?.errors && Object.keys(data.errors).length) {
+        showErrors(data.errors);
+      } else if (res.status === 429) {
+        setFormError("That’s a lot of requests in a short time. Try again in a few minutes.");
+      } else {
+        setFormError("We couldn’t send that. Try again in a moment.");
+      }
+    } catch {
+      setFormError("We couldn’t send that. Check your connection and try again.");
+    } finally {
+      setSending(false);
     }
-    setSent(true);
-    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }));
   };
 
   // Fixing a field clears its error straight away.
   const edit = (key: keyof Errors, set: (v: string) => void) => (v: string) => {
+    set(v);
+    if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
+  };
+  const editChip = (key: "team" | "stage", set: (v: string | null) => void) => (v: string | null) => {
     set(v);
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
   };
@@ -68,7 +92,7 @@ export function PartnerForm() {
           onSubmit={onSubmit}
           exit={{ opacity: 0, y: -10, transition: { duration: 0.3 } }}
           aria-label="Design partner request"
-          className="border-t border-line"
+          className="relative border-t border-line"
         >
           <Row n="01" label="Your name" error={errors.name}>
             {(id, describedBy) => (
@@ -85,20 +109,22 @@ export function PartnerForm() {
               <Input id={id} name="company" value={company} onChange={edit("company", setCompany)} autoComplete="organization" placeholder="Acme Insurance" describedBy={describedBy} invalid={!!errors.company} />
             )}
           </Row>
-          <Row n="04" label="Your team" optional group>
-            {(id) => <Chips id={id} options={TEAMS} value={team} onChange={setTeam} />}
+          <Row n="04" label="Your team" optional group error={errors.team}>
+            {(id) => <Chips id={id} options={TEAMS} value={team} onChange={editChip("team", setTeam)} />}
           </Row>
-          <Row n="05" label="Where are your agents?" optional group>
-            {(id) => <Chips id={id} options={STAGES} value={stage} onChange={setStage} />}
+          <Row n="05" label="Where are your agents?" optional group error={errors.stage}>
+            {(id) => <Chips id={id} options={STAGES} value={stage} onChange={editChip("stage", setStage)} />}
           </Row>
-          <Row n="06" label="What should they never do without asking?" optional>
-            {(id) => (
+          <Row n="06" label="What should they never do without asking?" optional error={errors.never}>
+            {(id, describedBy) => (
               <div>
                 <textarea
                   id={id}
                   name="never"
                   value={never}
-                  onChange={(e) => setNever(e.target.value)}
+                  onChange={(e) => edit("never", setNever)(e.target.value)}
+                  aria-invalid={!!errors.never || undefined}
+                  aria-describedby={describedBy}
                   rows={2}
                   placeholder="Promise a refund over $500, change a customer’s bank details…"
                   className="field-sizing-content block min-h-[3.5rem] w-full resize-none bg-transparent pb-3 text-[1.0625rem] leading-relaxed text-ink placeholder:text-ink-4 focus:outline-none sm:text-lg"
@@ -123,13 +149,52 @@ export function PartnerForm() {
             )}
           </Row>
 
+          {/* Honeypot for bots. Off-screen rather than display:none, which some bots skip. */}
+          <div aria-hidden className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
+            <label htmlFor="partner-website">Website</label>
+            <input
+              id="partner-website"
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+          </div>
+
           <div className="flex flex-col-reverse gap-5 pt-10 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-ink-3">We reply within two working days.</p>
-            <button type="submit" className={buttonClass("primary", "!h-12 w-full !px-6 text-[15px] sm:w-auto")}>
-              Request a conversation <span aria-hidden className={arrowClass}>→</span>
+            <button
+              type="submit"
+              disabled={sending}
+              aria-busy={sending || undefined}
+              className={buttonClass("primary", "!h-12 w-full !px-6 text-[15px] disabled:cursor-wait disabled:opacity-70 sm:w-auto")}
+            >
+              {sending ? (
+                "Sending…"
+              ) : (
+                <>
+                  Request a conversation <span aria-hidden className={arrowClass}>→</span>
+                </>
+              )}
             </button>
           </div>
-          <p className="mt-6 text-xs text-ink-4">Preview: requests from this page aren’t sent anywhere yet.</p>
+          <AnimatePresence initial={false}>
+            {formError && (
+              <motion.p
+                key={formError}
+                role="alert"
+                initial={{ opacity: 0, y: reduce ? 0 : 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={spring.ui}
+                className="mt-6 text-sm text-block"
+              >
+                {formError}
+              </motion.p>
+            )}
+          </AnimatePresence>
         </motion.form>
       ) : (
         <motion.div
@@ -174,7 +239,6 @@ export function PartnerForm() {
               Edit my answers
             </button>
           </div>
-          <p className="mt-8 text-xs text-ink-4">Preview: nothing was sent.</p>
         </motion.div>
       )}
     </AnimatePresence>
@@ -274,7 +338,7 @@ function Input({
   );
 }
 
-function Chips({ id, options, value, onChange }: { id: string; options: string[]; value: string | null; onChange: (v: string | null) => void }) {
+function Chips({ id, options, value, onChange }: { id: string; options: readonly string[]; value: string | null; onChange: (v: string | null) => void }) {
   return (
     <div role="radiogroup" aria-labelledby={`${id}-label`} className="flex flex-wrap gap-2 pb-3">
       {options.map((o) => {
