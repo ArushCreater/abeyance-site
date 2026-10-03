@@ -1,0 +1,5 @@
+Contact: https://abeyance-iota.vercel.app/legal/vulnerability-disclosure
+Expires: 2027-10-04T00:00:00.000Z
+Preferred-Languages: en
+Policy: https://abeyance-iota.vercel.app/legal/vulnerability-disclosure
+Canonical: https://abeyance-iota.vercel.app/.well-known/security.txt

@@ -164,7 +164,20 @@ export function PartnerForm() {
           </div>
 
           <div className="flex flex-col-reverse gap-5 pt-10 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-ink-3">We reply within two working days.</p>
+            <div className="max-w-[38ch] text-ink-3">
+              <p className="text-sm">We reply within two working days.</p>
+              <p className="mt-2 text-[13px] leading-relaxed">
+                By sending this, you agree to our{" "}
+                <Link href="/legal/terms" className="text-ink-2 underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink hover:decoration-ink-3">
+                  Terms
+                </Link>{" "}
+                and{" "}
+                <Link href="/legal/privacy" className="text-ink-2 underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink hover:decoration-ink-3">
+                  Privacy Policy
+                </Link>
+                . We use these details only to reply to you.
+              </p>
+            </div>
             <button
               type="submit"
               disabled={sending}

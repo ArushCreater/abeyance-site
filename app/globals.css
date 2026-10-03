@@ -168,6 +168,131 @@ body {
   }
 }
 
+/* ---------------------------------------------------------------- */
+/* Long-form legal and trust pages. Plain elements, styled here, so  */
+/* the content files read like documents rather than markup.         */
+/* ---------------------------------------------------------------- */
+
+@layer components {
+  .legal-prose {
+    color: var(--color-ink-2);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+  .legal-prose > * + * {
+    margin-top: 1em;
+  }
+  .legal-prose h3 {
+    margin-top: 2.25em;
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+  }
+  .legal-prose > h3:first-child {
+    margin-top: 0;
+  }
+  .legal-prose h3 + * {
+    margin-top: 0.5em;
+  }
+  .legal-prose strong {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  .legal-prose a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 200ms ease-out;
+  }
+  .legal-prose a:hover {
+    text-decoration-color: var(--color-ink-3);
+  }
+  .legal-prose code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    color: var(--color-ink);
+  }
+  /* Lists: a short hairline instead of a bullet, numbers in mono. */
+  .legal-prose ul,
+  .legal-prose ol {
+    border-top: 1px solid var(--color-line);
+  }
+  .legal-prose li {
+    position: relative;
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.7em 0 0.7em 1.75rem;
+    line-height: 1.6;
+  }
+  .legal-prose ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.55em;
+    width: 0.75rem;
+    height: 1px;
+    background: var(--color-ink-4);
+  }
+  .legal-prose ol {
+    counter-reset: legal;
+  }
+  .legal-prose ol > li {
+    counter-increment: legal;
+  }
+  .legal-prose ol > li::before {
+    content: counter(legal, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 1em;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--color-ink-4);
+  }
+  .legal-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .legal-prose caption {
+    text-align: left;
+    padding-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-3);
+  }
+  .legal-prose th {
+    border-bottom: 1px solid var(--color-line-strong);
+    padding: 0 1.25rem 0.6rem 0;
+    text-align: left;
+    vertical-align: bottom;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    font-weight: 400;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .legal-prose td,
+  .legal-prose tbody th {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.85rem 1.25rem 0.85rem 0;
+    vertical-align: top;
+  }
+  /* Row headers read as the first cell, not as column labels. */
+  .legal-prose tbody th {
+    font-family: var(--font-sans);
+    font-size: inherit;
+    font-weight: 500;
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--color-ink);
+  }
+}
+
 /* Range inputs (policy thresholds) */
 input[type="range"].threshold {
   appearance: none;
