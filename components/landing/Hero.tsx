@@ -1,7 +1,7 @@
 import { SuspendedText } from "@/components/type/SuspendedText";
 import { arrowClass, buttonClass } from "@/components/ui/button";
 import { SIGN_IN_URL } from "@/lib/site";
-import { Gimbal } from "./Gimbal";
+import { Cradle } from "./Cradle";
 
 export function Hero() {
   return (
@@ -50,7 +50,7 @@ export function Hero() {
         <p className="mt-12 font-mono text-xs text-ink-3 sm:mt-16 xl:mt-12">Humans only for the actions that matter.</p>
       </div>
 
-      <Gimbal className="hidden aspect-square w-full xl:block" />
+      <Cradle className="hidden aspect-square w-full xl:block" />
     </section>
   );
 }
