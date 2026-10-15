@@ -12,7 +12,7 @@ const LINKS = [
   { href: "/#how", label: "How it works" },
   { href: "/#policies", label: "Policies" },
   { href: "/#proof", label: "Smart scoring" },
-  { href: "/#security", label: "Security" },
+  { href: "/#pricing", label: "Pricing" },
 ];
 
 export function SiteHeader() {

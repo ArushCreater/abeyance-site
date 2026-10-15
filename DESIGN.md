@@ -55,3 +55,9 @@ A force-directed canvas (d3-force), in the spirit of Obsidian's graph view. Agen
 ## Accessibility
 
 Skip link, landmarks, visible amber focus rings, `aria-live` for new holds and receipts, keyboard approval (A / D / J / K), a table view for the chart, labelled sliders, and a `role=switch` for policy enforcement. Every animated text has a screen-reader copy. The emergency stop confirms with press-and-hold (pointer, Enter or Space; ⇧⌘. opens it anywhere). The agent map has a described canvas plus a list view; charts on agent pages have hidden data tables.
+
+## Developer-first landing (October 2026)
+
+The hero is a real, procedurally built Three.js sculpture: three machined rectangular thresholds, an amber action packet and an audit stack. Page scroll advances proposal, rule hold, approval and recording. The scene stays pinned beside the explanation on desktop; mobile uses a contained object and readable sequential chapters. Reduced motion renders a still, and the HTML receipt remains useful without WebGL. Render work pauses offscreen and when the tab is hidden.
+
+The product story is rules-first. Jev scoring observes in shadow unless a customer enables assisted mode. Every simulated number or agreement chart is labelled illustrative. Primary actions lead to developer setup or signup.
