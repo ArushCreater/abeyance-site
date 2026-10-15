@@ -10,7 +10,8 @@ import { spring } from "@/lib/motion";
 
 const LINKS = [
   { href: "/#how", label: "How it works" },
-  { href: "/#proof", label: "Proof" },
+  { href: "/#policies", label: "Policies" },
+  { href: "/#proof", label: "Smart scoring" },
   { href: "/#security", label: "Security" },
 ];
 
@@ -72,8 +73,8 @@ export function SiteHeader() {
           <a href={SIGN_IN_URL} className="hidden rounded-full px-3 py-2 text-sm text-ink-2 transition-colors hover:text-ink sm:inline-flex">
             Sign in
           </a>
-          <a href="/partners" className={buttonClass("primary", "!h-9 whitespace-nowrap !px-4 max-sm:!hidden")}>
-            Design partners <span aria-hidden className={arrowClass}>→</span>
+          <a href="/#start" className={buttonClass("primary", "!h-9 whitespace-nowrap !px-4 max-sm:!hidden")}>
+            Start building <span aria-hidden className={arrowClass}>↗</span>
           </a>
           <button
             type="button"
@@ -123,8 +124,8 @@ export function SiteHeader() {
                 </motion.li>
               ))}
             </ul>
-            <a href="/partners" onClick={(e) => go(e, "/partners")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
-              Become a design partner <span aria-hidden className={arrowClass}>→</span>
+            <a href="/#start" onClick={(e) => go(e, "/#start")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
+              Start building <span aria-hidden className={arrowClass}>↗</span>
             </a>
             <p className="mt-6 font-mono text-xs text-ink-3">Humans only for the actions that matter.</p>
           </motion.div>

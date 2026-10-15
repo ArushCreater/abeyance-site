@@ -69,7 +69,7 @@ export function SiteFooter() {
         <div className="grid gap-14 pb-16 pt-16 sm:pb-20 sm:pt-20 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
           <div className="flex flex-col items-start">
             <Logo />
-            <p className="mt-4 max-w-[30ch] text-sm leading-relaxed text-ink-3">The commit control for AI agents.</p>
+            <p className="mt-4 max-w-[30ch] text-sm leading-relaxed text-ink-3">The approval and audit layer for AI agents.</p>
             <p className="label mt-8">Made in Sydney</p>
             <p aria-hidden className="mt-1.5 font-mono text-[11px] tracking-[0.04em] text-ink-4">
               33.87° S · 151.21° E

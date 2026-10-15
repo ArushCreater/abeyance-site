@@ -18,8 +18,8 @@ const POINTS = [
     body: "The full ledger as JSON Lines or CSV, with reason codes and hashes, ready for the tools your security team already watches.",
   },
   {
-    title: "Shadow mode first",
-    body: "Run beside your current approval step with nothing blocked until the numbers earn your trust.",
+    title: "Scoring observes first",
+    body: "Deterministic rules enforce your boundaries. Jev scores alongside them; assisted decisions require an explicit opt-in.",
   },
   {
     title: "Reasons, not silent failures",
@@ -33,7 +33,7 @@ export function Security() {
       <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-28 lg:py-40">
         <p className="label">Security &amp; audit</p>
         <h2 id="sec-title" className="display-tight mt-5 max-w-[17ch] text-[clamp(2.2rem,5.5vw,4.25rem)] font-[300]">
-          Built like a control system, not a chatbot.
+          A record you can stand behind.
         </h2>
         <a href={`${DOCS_URL}/security`} className="group mt-6 inline-flex items-center gap-2 py-2 text-sm text-ink-2 transition-colors hover:text-ink">
           <span className="h-px w-4 bg-hold transition-all duration-300 group-hover:w-6" aria-hidden />

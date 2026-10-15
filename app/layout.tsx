@@ -20,11 +20,11 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Abeyance — The commit control for AI agents",
+    default: "Abeyance — Let your agent act. Keep the last word.",
     template: "%s · Abeyance",
   },
   description:
-    "Abeyance scores every irreversible agent action before it happens. Most go straight through; the risky few wait for one-click approval. Humans only for the actions that matter.",
+    "The approval and audit layer for AI agents. Set rules, approve actions in Slack, and keep a tamper-evident trail. Smart risk scoring observes alongside your policies.",
   // Icons come from the file conventions: app/icon.svg, app/favicon.ico, app/apple-icon.png.
 };
 
