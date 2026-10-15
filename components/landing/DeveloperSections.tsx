@@ -1,45 +1,97 @@
 "use client";
 
 import { useState } from "react";
-import { CONSOLE_URL, DOCS_URL, SIGN_IN_URL } from "@/lib/site";
+import { DOCS_URL } from "@/lib/site";
+import { demoDecision, DEMO_POLICY } from "@/lib/policy-demo.mjs";
+import { LogoMark } from "@/components/brand/Logo";
+
+const ACTIONS = [
+  { value: "payment.send", label: "Send a payment", icon: "↗" },
+  { value: "email.send", label: "Send an email", icon: "✉" },
+  { value: "file.delete", label: "Delete a file", icon: "×" },
+];
+
+export function PolicyPlayground() {
+  const [action, setAction] = useState("payment.send");
+  const [amount, setAmount] = useState(600);
+  const [external, setExternal] = useState(true);
+  const [environment, setEnvironment] = useState("production");
+  const [review, setReview] = useState<"approved" | "denied" | null>(null);
+  const result = demoDecision(action, amount, external, environment);
+  const pending = result.outcome === "HOLD" && !review;
+  const title = action === "payment.send" ? `$${amount.toLocaleString("en-US")} to vendor_42` : action === "email.send" ? `Email to ${external ? "client@example.com" : "team@yourcompany.com"}` : `Delete /exports/customer-data.csv`;
+  return <section className="product-demo section-wrap" id="how" aria-labelledby="demo-title">
+    <div className="section-intro"><h2 id="demo-title" className="section-heading">Give every action<br />a clear answer.</h2><p className="section-description">Your agent proposes an action. Your rules decide what happens next. Try it with a payment, an email, or a file delete.</p></div>
+    <div className="flow-demo">
+      <fieldset className="action-picker"><legend className="sr-only">Choose an example action</legend>{ACTIONS.map(item => <label key={item.value} className={action === item.value ? "selected" : ""}><input type="radio" name="example-action" value={item.value} checked={action === item.value} onChange={() => { setAction(item.value); setReview(null); }} /><span aria-hidden>{item.icon}</span>{item.label}</label>)}</fieldset>
+      <div className="demo-columns">
+        <div className="proposed-action"><div className="window-title"><span className="agent-avatar" aria-hidden>↗</span><div><strong>Your agent</strong><span>Proposing a tool call</span></div></div><div className="action-name"><code>{action}</code><h3>{title}</h3></div>
+          {action === "payment.send" ? <div className="demo-input"><label htmlFor="payment-amount">Payment amount <output htmlFor="payment-amount">${amount.toLocaleString("en-US")}</output></label><input id="payment-amount" type="range" min="0" max="1500" step="50" value={amount} onChange={e => { setAmount(Number(e.target.value)); setReview(null); }} /><div className="range-labels"><span>$0</span><span>$500 approval limit</span><span>$1,500</span></div></div> : action === "email.send" ? <label className="demo-checkbox"><input type="checkbox" checked={external} onChange={e => { setExternal(e.target.checked); setReview(null); }} /> Recipient is outside your organisation</label> : <div className="demo-input"><label htmlFor="delete-environment">Environment</label><select id="delete-environment" value={environment} onChange={e => { setEnvironment(e.target.value); setReview(null); }}><option value="production">Production</option><option value="development">Development</option></select></div>}
+          <div className="matched-rule"><span>Matched policy</span><code>{result.rule}</code><p>{result.reason}</p></div>
+        </div>
+        <div className="decision-preview" aria-live="polite" aria-atomic="true">
+          <div className="decision-heading"><LogoMark className="h-7 w-7 text-cobalt" /><strong>Abeyance</strong><span className={`decision-badge badge-${result.outcome.toLowerCase()}`}>{result.outcome}</span></div>
+          {pending ? <><h3>Ready for your approval.</h3><p>The tool has paused. In your workspace, this request arrives in Slack with the action, rule and redacted arguments.</p><div className="approval-card"><div><span className="slack-icon" aria-hidden>✳</span><strong>Approve this action?</strong></div><p>{title}</p><div className="approval-buttons"><button type="button" className="approve" onClick={() => setReview("approved")}>Approve <span aria-hidden>✓</span></button><button type="button" onClick={() => setReview("denied")}>Deny <span aria-hidden>×</span></button></div></div></> : <><div className={`outcome-icon ${review === "denied" || result.outcome === "BLOCK" ? "stopped" : "allowed"}`} aria-hidden>{review === "denied" || result.outcome === "BLOCK" ? "×" : "↗"}</div><h3>{review === "approved" ? "Approved. The agent resumes." : review === "denied" ? "Denied. The action stops." : result.outcome === "BLOCK" ? "Blocked before it runs." : "Allowed to run."}</h3><p>{review === "approved" ? "The guard releases this tool call after approval. Your agent can continue its work." : review === "denied" ? "The guarded function does not execute. The agent receives the reason." : result.outcome === "BLOCK" ? "The policy prevents this action. A risk score cannot override the block." : "The guard calls the wrapped function and returns its result to your agent."}</p></>}
+          <div className="mini-audit"><span aria-hidden>⤷</span><div><strong>{pending ? "Awaiting a reviewer" : "Decision added to the audit trail"}</strong><p>{pending ? "Timeout: 15 minutes · deny by default" : `${result.outcome} rule${review ? ` → ${review} by you` : ""} · policy v1`}</p></div></div>
+          {review && <button type="button" className="reset-demo" onClick={() => setReview(null)}>Replay this example ↺</button>}
+        </div>
+      </div>
+      <p className="demo-disclosure">Interactive example. No tools are executed and no Slack message is sent.</p>
+    </div>
+    <div className="outcome-explainer"><div><span className="decision-badge badge-allow">ALLOW</span><p>Let routine work run.</p></div><div><span className="decision-badge badge-hold">HOLD</span><p>Wait for a human decision.</p></div><div><span className="decision-badge badge-block">BLOCK</span><p>Stop it before it happens.</p></div></div>
+  </section>;
+}
 
 const SNIPPETS = {
-  TypeScript: `import { Abeyance } from "./abeyance/client.mjs";\n\nconst abeyance = new Abeyance({\n  apiKey: process.env.ABEYANCE_API_KEY,\n  baseUrl: process.env.ABEYANCE_URL,\n});\n\nawait abeyance.guard({\n  agent_id: "accounts-payable",\n  tool: "send_payment",\n  action: "payment.send",\n  args: { payee: "vendor_42", amount: 600 },\n  amount: 600,\n}, () => sendPayment({ payee: "vendor_42", amount: 600 }));`,
-  Python: `from abeyance import Gate\n\ngate = Gate(\n    api_key=os.environ["ABEYANCE_API_KEY"],\n    base_url=os.environ["ABEYANCE_URL"],\n)\n\n@gate.guard("payment.send")\ndef send_payment(payee, amount):\n    return payments.send(payee=payee, amount=amount)\n\n# Pauses here until a person approves in Slack.\nsend_payment(payee="vendor_42", amount=600)`,
-  HTTP: `POST /api/v1/propose\nAuthorization: Bearer abk_live_…\nContent-Type: application/json\n\n{\n  "agent_id": "accounts-payable",\n  "tool": "send_payment",\n  "action": "payment.send",\n  "args": { "payee": "vendor_42", "amount": 600 },\n  "amount": 600\n}\n\n// HOLD → poll the returned hold.poll_url.\n// Execute your action only when allowed is true.`,
+  TypeScript: `import { Abeyance } from "./abeyance/client.mjs";
+import { sendPayment } from "./tools"; // your existing tool
+
+const abeyance = new Abeyance(); // reads your API key and URL
+
+await abeyance.guard({
+  agent_id: "accounts-payable",
+  tool: "send_payment",
+  action: "payment.send",
+  args: { payee: "vendor_42", amount: 600 },
+  amount: 600,
+}, () => sendPayment({ payee: "vendor_42", amount: 600 }));
+
+// The function runs only after a final ALLOW or approval.`,
+  Python: `from abeyance import Gate
+from tools import send_payment  # your existing tool
+
+gate = Gate()  # reads your API key and URL
+
+gate.guard({
+    "agent_id": "accounts-payable",
+    "tool": "send_payment",
+    "action": "payment.send",
+    "args": {"payee": "vendor_42", "amount": 600},
+    "amount": 600,
+}, lambda: send_payment(payee="vendor_42", amount=600))
+
+# A matching HOLD rule pauses until a final decision.`,
+  MCP: `# After downloading the CLI from your console:
+node abeyance.mjs init --mcp
+
+# Set these in .env with your Abeyance API key and URL:
+# MCP_UPSTREAM_URL=https://your-server.example/mcp
+# MCP_TOOL_MAP={"send_payment":"payment.send"}
+
+# Start the proxy in front of your existing MCP server.
+node --env-file=.env abeyance/proxy.mjs
+
+# Set your agent's MCP server URL to:
+# http://127.0.0.1:8787/mcp`,
 };
 
 export function DeveloperStart() {
   const [tab, setTab] = useState<keyof typeof SNIPPETS>("TypeScript");
-  const [copied, setCopied] = useState(false);
-  const copy = async () => { try { await navigator.clipboard.writeText(SNIPPETS[tab]); setCopied(true); } catch { setCopied(false); } };
-  return <section id="start" className="developer-section section-wrap">
-    <div className="developer-grid"><div><h2 className="display-tight section-heading">A small change.<br /><span className="text-ink-3">A lot more control.</span></h2><p className="section-description">Wrap the function that does the thing. Abeyance checks the action before your code runs, waits when a person is needed, and returns the result when it’s approved.</p><a href={`${DOCS_URL}/quickstart`} className="text-link mt-8">Follow the quickstart <span aria-hidden>↗</span></a><div className="framework-list" id="integrations"><span>LangChain</span><span>OpenAI Agents SDK</span><span>CrewAI</span><span>Plain HTTP</span></div><p className="text-xs leading-relaxed text-ink-3">Use the SDK with your existing tool decorators. Or route tool calls through the local MCP proxy.</p></div>
-      <div className="code-editor"><div className="code-toolbar"><div role="tablist" aria-label="SDK language" onKeyDown={(e) => { const tabs = Object.keys(SNIPPETS) as (keyof typeof SNIPPETS)[]; const delta = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!delta) return; e.preventDefault(); const next = tabs[(tabs.indexOf(tab) + delta + tabs.length) % tabs.length]; setTab(next); setCopied(false); document.getElementById(`tab-${next}`)?.focus(); }}>{(Object.keys(SNIPPETS) as (keyof typeof SNIPPETS)[]).map((lang) => <button key={lang} type="button" role="tab" aria-selected={tab === lang} aria-controls="sdk-example" id={`tab-${lang}`} tabIndex={tab === lang ? 0 : -1} onClick={() => { setTab(lang); setCopied(false); }} className={tab === lang ? "active" : ""}>{lang}</button>)}</div><button type="button" onClick={copy} className="copy-button" aria-live="polite">{copied ? "Copied ✓" : "Copy ↗"}</button></div><pre id="sdk-example" role="tabpanel" aria-labelledby={`tab-${tab}`} tabIndex={0}><code>{SNIPPETS[tab]}</code></pre><div className="code-footer"><span className="status-dot" /> ALLOW executes · HOLD waits · BLOCK aborts</div></div>
-    </div>
-  </section>;
+  const [copied, setCopied] = useState<"idle" | "done" | "error">("idle");
+  async function copy() { try { await navigator.clipboard.writeText(SNIPPETS[tab]); setCopied("done"); } catch { setCopied("error"); } }
+  return <section id="start" className="developer-section section-wrap"><div className="developer-grid"><div><h2 className="section-heading">Your tools.<br />One extra guard.</h2><p className="section-description">Keep the agent you already built. Wrap the function that sends a payment, changes a record, or calls an external tool. Abeyance checks permission before your code executes.</p><ol className="setup-steps"><li><span>1</span><div><h3>Create a workspace</h3><p>Get an API key and connect your Slack channel.</p></div></li><li><span>2</span><div><h3>Run the installer</h3><p>Download the SDK or local MCP proxy from your console.</p></div></li><li><span>3</span><div><h3>Wrap a tool and set a rule</h3><p>Try your first held action with the payment template.</p></div></li></ol><a href={`${DOCS_URL}/quickstart`} className="text-link">Follow the quickstart <span aria-hidden>→</span></a></div><div className="code-editor"><div className="code-toolbar"><div role="tablist" aria-label="Integration example" onKeyDown={e => { const tabs = Object.keys(SNIPPETS) as (keyof typeof SNIPPETS)[]; const delta = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!delta && e.key !== "Home" && e.key !== "End") return; e.preventDefault(); const next = e.key === "Home" ? tabs[0] : e.key === "End" ? tabs[tabs.length - 1] : tabs[(tabs.indexOf(tab) + delta + tabs.length) % tabs.length]; setTab(next); setCopied("idle"); document.getElementById(`sdk-${next}`)?.focus(); }}>{(Object.keys(SNIPPETS) as (keyof typeof SNIPPETS)[]).map(lang => <button key={lang} role="tab" aria-selected={tab === lang} aria-controls="sdk-example" id={`sdk-${lang}`} tabIndex={tab === lang ? 0 : -1} onClick={() => { setTab(lang); setCopied("idle"); }}>{lang}</button>)}</div><button type="button" onClick={copy} className="copy-button" aria-live="polite">{copied === "done" ? "Copied ✓" : copied === "error" ? "Select code to copy" : "Copy"}</button></div><pre id="sdk-example" role="tabpanel" aria-labelledby={`sdk-${tab}`} tabIndex={0}><code>{SNIPPETS[tab]}</code></pre><div className="code-footer">{tab === "MCP" ? "Your existing MCP server stays behind the proxy." : "A denied or blocked action never calls your function."}</div></div></div><div id="integrations" className="framework-list"><p>Works around your existing tools</p><span>LangChain</span><span>OpenAI Agents SDK</span><span>CrewAI</span><span>MCP</span><span>HTTP API</span></div></section>;
 }
 
-type DemoTool = "payment.send" | "database.read" | "file.delete" | "email.send";
-export function PolicyPlayground() {
-  const [tool, setTool] = useState<DemoTool>("payment.send");
-  const [amount, setAmount] = useState(600);
-  const outcome = tool === "file.delete" ? "BLOCK" : tool === "email.send" || (tool === "payment.send" && amount > 500) ? "HOLD" : "ALLOW";
-  const reason = tool === "file.delete" ? "Production deletes are blocked." : tool === "email.send" ? "External email needs a person." : tool === "payment.send" && amount > 500 ? `$${amount.toLocaleString()} exceeds your $500 approval limit.` : "No approval rule matched. The action can run.";
-  return <section id="policies" className="policy-section section-wrap">
-    <div className="policy-heading"><h2 className="display-tight section-heading">Your policy.<br /><span className="text-ink-3">No guesswork.</span></h2><p className="section-description">Readable rules give every action a predictable answer. Try changing the action or payment amount. The same input gives the same decision.</p></div>
-    <div className="playground"><div className="policy-yaml"><p className="label">abeyance.yaml</p><pre><code><span className="text-ink-3"># Your rules make the decision.</span>{`\nrules:\n  - action: payment.send\n    when: { amount: { gt: 500 } }\n    outcome: HOLD\n\n  - action: file.delete\n    when: { environment: production }\n    outcome: BLOCK\n\n  - action: email.send\n    when: { external: true }\n    outcome: HOLD\n\ndefault: ALLOW\nscoring: shadow`}</code></pre></div><div className="policy-test"><p className="label">Test an action</p><label htmlFor="demo-tool" className="field-label">Action type</label><select id="demo-tool" value={tool} onChange={(e) => setTool(e.target.value as DemoTool)}><option value="payment.send">payment.send</option><option value="database.read">database.read</option><option value="file.delete">file.delete · production</option><option value="email.send">email.send · external</option></select><div className={`amount-control ${tool !== "payment.send" ? "amount-disabled" : ""}`}><label htmlFor="demo-amount" className="field-label">Payment amount <output htmlFor="demo-amount">${amount.toLocaleString()}</output></label><input id="demo-amount" type="range" min={0} max={1500} step={50} disabled={tool !== "payment.send"} value={amount} onChange={(e) => setAmount(Number(e.target.value))} /><div className="range-labels"><span>$0</span><span>approval limit $500</span><span>$1,500</span></div></div><div className={`demo-result result-${outcome.toLowerCase()}`} aria-live="polite" aria-atomic="true"><span>{outcome === "ALLOW" ? "↗" : outcome === "HOLD" ? "Ⅱ" : "×"}</span><div><strong>{outcome}</strong><p>{reason}</p></div></div><p className="playground-note">Runs locally in your browser. No payment is sent.</p></div></div>
-  </section>;
-}
-
-export function ShadowScoring() {
-  return <section id="proof" className="shadow-section section-wrap"><div className="developer-grid"><div><h2 className="display-tight section-heading">Intelligence beside<br /><span className="text-ink-3">your rules.</span></h2><p className="section-description">Jev adds a risk score, confidence and plain-English reasons. It runs alongside your policy, so a score doesn’t get the final word.</p><dl className="shadow-points"><div><dt>See the reasons</dt><dd>New payee. Personal data. Irreversible change. Unusual amount.</dd></div><div><dt>Measure against people</dt><dd>Compare its recommendations with what your team actually approves and denies.</dd></div><div><dt>Choose when to assist</dt><dd>Assisted mode is opt-in, per action type, after enough reviewed actions establish agreement.</dd></div></dl></div><div className="agreement-example"><div className="agreement-top"><span className="label">Score ↔ human decision</span><span className="shadow-badge">ILLUSTRATIVE DATA</span></div><div className="agreement-number">94<span>%</span></div><p className="text-sm text-ink-3">agreement across 100 reviewed example actions</p><div className="agreement-chart" role="img" aria-label="Illustrative agreement rises from 62 percent to 94 percent across eight periods.">{[62, 67, 73, 71, 81, 86, 90, 94].map((n, i) => <div key={i}><span style={{ height: `${n}%` }} /><small>{i === 0 ? "First reviews" : i === 7 ? "Today" : ""}</small></div>)}</div><div className="agreement-legend"><span><i /> Agrees with reviewer</span><span>Assisted mode <strong>OFF</strong></span></div><p className="text-xs leading-relaxed text-ink-3 mt-6">Illustrative example, not measured customer performance. Rules remain in charge.</p></div></div></section>;
-}
-
-export function DeveloperCTA() {
-  return <section className="developer-cta section-wrap"><h2 className="display-tight">Move fast.<br /><span className="text-ink-3">Leave a trail.</span></h2><div className="hero-actions"><a href={SIGN_IN_URL} className="site-cta">Open the console <span aria-hidden>↗</span></a><a href={`${DOCS_URL}/quickstart`} className="text-link">Build your first guard <span aria-hidden>→</span></a></div><p className="mt-8 text-sm text-ink-3">Building something interesting? <a href="/partners" className="underline underline-offset-4 hover:text-ink">Work with us.</a></p></section>;
-}
-
-export function Pricing() {
-  return <section id="pricing" className="section-wrap"><div className="policy-heading"><h2 className="display-tight section-heading">Your first agent.<br /><span className="text-ink-3">On the house.</span></h2><p className="section-description">Start with real policies, real approvals and a verifiable audit trail. Add capacity when your agents need it.</p></div><div className="pricing-grid"><div><p className="label">Free</p><p className="pricing-title">$0<span> / to get started</span></p><ul><li>1 connected agent</li><li>1,000 actions per month</li><li>7-day action history</li><li>Rules, Slack approvals and shadow scoring</li></ul><a href={`${CONSOLE_URL}/login?mode=signup`} className="site-cta">Create your workspace <span aria-hidden>↗</span></a></div><div><p className="label">Paid</p><p className="pricing-title">As you grow<span> / talk to us</span></p><ul><li>More agents and actions</li><li>Unlimited log retention</li><li>Signed PDF evidence exports</li><li>SSO for managed deployments</li></ul><a href="/partners" className="text-link">Tell us what you’re building <span aria-hidden>→</span></a></div></div></section>;
+export function PolicyEditor() {
+  return <section id="policies" className="policy-section"><div className="section-wrap developer-grid"><div><h2 className="section-heading">Write down<br />your boundaries.</h2><p className="section-description">Hold payments over $500. Block deletes in production. Ask before emailing someone outside your company. Policies are readable YAML, versioned with every decision.</p><p className="section-description">Start with a template, edit it in the dashboard, and test an action before saving. The same action and policy produce the same rule decision.</p><a href={`${DOCS_URL}/operate/policies`} className="text-link">Explore policies <span aria-hidden>→</span></a></div><div className="policy-code"><div className="window-title"><span className="file-icon" aria-hidden>≡</span><strong>abeyance.yaml</strong><span>Shadow scoring</span></div><pre tabIndex={0}><code>{DEMO_POLICY}</code></pre></div></div></section>;
 }

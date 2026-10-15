@@ -1,13 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, IBM_Plex_Mono } from "next/font/google";
+import { Manrope, IBM_Plex_Mono } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import "./globals.css";
 
-// Variable display face: weight, width and optical size are all animatable.
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  axes: ["wdth", "opsz"],
   display: "swap",
 });
 
@@ -20,7 +18,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Abeyance — Let your agent act. Keep the last word.",
+    default: "Abeyance — Control what your AI agents can do.",
     template: "%s · Abeyance",
   },
   description:
@@ -29,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f8f7f3",
+  themeColor: "#fbfbfd",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
@@ -38,7 +36,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-AU" className={`${bricolage.variable} ${plexMono.variable}`}>
+    <html lang="en-AU" className={`${manrope.variable} ${plexMono.variable}`}>
       <body className="min-h-dvh bg-bg text-ink antialiased">
         <a
           href="#main"

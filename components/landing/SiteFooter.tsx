@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
-import { Placeholder } from "@/components/legal/Placeholder";
 import { LEGAL_DOCS } from "@/lib/legal";
 import { DOCS_URL, SIGN_IN_URL } from "@/lib/site";
-import { FooterCTA } from "./FooterCTA";
-import { FooterThreshold } from "./FooterThreshold";
 
 type FooterLink = { href: string; label: string; external?: boolean };
 
@@ -47,57 +44,8 @@ const GROUPS: { title: string; links: FooterLink[] }[] = [
   },
 ];
 
-/*
- * The footer: one calm line, a threshold with something held at it, and the
- * links as hairline lists. Amber appears once, on the held dot.
- */
 export function SiteFooter() {
-  return (
-    <footer className="relative overflow-hidden border-t border-line">
-      <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
-        <div className="grid gap-10 pt-20 sm:pt-28 lg:grid-cols-[minmax(0,8fr)_minmax(0,4fr)] lg:items-end lg:gap-16 lg:pt-36">
-          <p className="display-tight text-[clamp(2.75rem,8.4vw,6.75rem)] font-[280] text-ink">
-            Nothing irreversible
-            <span className="block text-ink-3">without a reason.</span>
-          </p>
-          <FooterCTA />
-        </div>
-
-        <FooterThreshold className="mt-16 sm:mt-24 lg:mt-28" />
-
-        <div className="grid gap-14 pb-16 pt-16 sm:pb-20 sm:pt-20 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
-          <div className="flex flex-col items-start">
-            <Logo />
-            <p className="mt-4 max-w-[30ch] text-sm leading-relaxed text-ink-3">The approval and audit layer for AI agents.</p>
-          </div>
-
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-4 md:gap-x-8">
-            {GROUPS.map((g) => (
-              <div key={g.title} className="min-w-0">
-                <h2 className="label">{g.title}</h2>
-                <ul className="mt-4 border-t border-line">
-                  {g.links.map((l) => (
-                    <li key={l.label} className="border-b border-line">
-                      <FooterAnchor {...l} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </nav>
-        </div>
-
-        <div className="flex flex-col gap-5 border-t border-line pb-[max(2rem,env(safe-area-inset-bottom,0px))] pt-8 md:flex-row md:items-center md:justify-between md:gap-10">
-          <div className="space-y-1.5 text-xs leading-relaxed text-ink-3">
-            <p>
-              © 2026 <Placeholder>COMPANY LEGAL NAME</Placeholder>
-            </p>
-            <p>All figures on this site are example data from a simulated deployment.</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
+  return <footer className="site-footer"><div className="footer-grid"><div><Logo /><p>The approval and audit layer<br />for AI agent actions.</p></div><nav aria-label="Footer">{GROUPS.map(group => <div key={group.title}><h2>{group.title}</h2><ul>{group.links.map(link => <li key={link.label}><FooterAnchor {...link} /></li>)}</ul></div>)}</nav></div><div className="footer-bottom"><p>© 2026 Abeyance</p><p>Built for agents. Answerable to people.</p></div></footer>;
 }
 
 function FooterAnchor({ href, label, external }: FooterLink) {

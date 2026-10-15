@@ -5,14 +5,13 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ScrollLogo } from "@/components/brand/ScrollLogo";
-import { arrowClass, buttonClass } from "@/components/ui/button";
-import { DOCS_URL, SIGN_IN_URL } from "@/lib/site";
+import { arrowClass } from "@/components/ui/button";
+import { CONSOLE_URL, DOCS_URL, SIGN_IN_URL } from "@/lib/site";
 import { spring } from "@/lib/motion";
 
 const LINKS = [
-  { href: "/#how", label: "How it works" },
-  { href: "/#policies", label: "Policies" },
-  { href: "/#proof", label: "Smart scoring" },
+  { href: "/#how", label: "Product" },
+  { href: "/#start", label: "Developers" },
   { href: "/#pricing", label: "Pricing" },
 ];
 
@@ -29,7 +28,7 @@ export function SiteHeader() {
     const hash = href.slice(1);
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
-        document.querySelector(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.querySelector(hash)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
         history.replaceState(null, "", hash);
       }),
     );
@@ -74,8 +73,8 @@ export function SiteHeader() {
           <a href={SIGN_IN_URL} className="hidden rounded-full px-2.5 py-2 text-[13px] text-ink-2 transition-colors hover:text-ink sm:inline-flex">
             Sign in
           </a>
-          <Link href="/#start" className={buttonClass("primary", "nav-start whitespace-nowrap !h-10 !px-5")}>
-            Start building <span aria-hidden className={arrowClass}>↗</span>
+          <Link href={`${CONSOLE_URL}/login?mode=signup`} className="site-cta nav-start">
+            Start free <span aria-hidden className={arrowClass}>↗</span>
           </Link>
           <button
             type="button"
@@ -125,8 +124,8 @@ export function SiteHeader() {
                 </motion.li>
               ))}
             </ul>
-            <Link href="/#start" onClick={(e) => go(e, "/#start")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
-              Start building <span aria-hidden className={arrowClass}>↗</span>
+            <Link href={`${CONSOLE_URL}/login?mode=signup`} className="site-cta mt-6 w-full">
+              Start free <span aria-hidden className={arrowClass}>↗</span>
             </Link>
           </motion.div>
         )}
