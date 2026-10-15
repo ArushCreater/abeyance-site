@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ScrollLogo } from "@/components/brand/ScrollLogo";
 import { arrowClass, buttonClass } from "@/components/ui/button";
@@ -52,9 +53,9 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md">
-      <nav aria-label="Main" className="mx-auto flex h-14 max-w-[1200px] items-center justify-between gap-3 px-5 sm:h-16 sm:px-8">
-        <ScrollLogo className="-my-2 py-2.5" />
+    <header className="site-header">
+      <nav aria-label="Main" className="glass-navbar">
+        <ScrollLogo className="nav-wordmark" />
         <div className="flex items-center gap-1 sm:gap-2">
           <ul className="hidden items-center gap-1 lg:flex">
             {LINKS.map((l) => (
@@ -73,9 +74,9 @@ export function SiteHeader() {
           <a href={SIGN_IN_URL} className="hidden rounded-full px-3 py-2 text-sm text-ink-2 transition-colors hover:text-ink sm:inline-flex">
             Sign in
           </a>
-          <a href="/#start" className={buttonClass("primary", "!h-9 whitespace-nowrap !px-4 max-sm:!hidden")}>
+          <Link href="/#start" className={buttonClass("primary", "nav-start whitespace-nowrap !h-10 !px-5")}>
             Start building <span aria-hidden className={arrowClass}>↗</span>
-          </a>
+          </Link>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
@@ -101,7 +102,7 @@ export function SiteHeader() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8, transition: { duration: 0.18 } }}
             transition={spring.settle}
-            className="h-[calc(100dvh-3.5rem-env(safe-area-inset-top,0px))] overflow-y-auto border-t border-line bg-bg px-5 pb-[max(2rem,env(safe-area-inset-bottom,0px))] pt-4 sm:h-[calc(100dvh-4rem-env(safe-area-inset-top,0px))] sm:px-8 lg:hidden"
+            className="glass-mobile-menu lg:hidden"
           >
             <ul className="divide-y divide-line">
               {[...LINKS, { href: DOCS_URL, label: "Documentation" }, { href: SIGN_IN_URL, label: "Sign in" }].map((l, i) => (
@@ -124,9 +125,9 @@ export function SiteHeader() {
                 </motion.li>
               ))}
             </ul>
-            <a href="/#start" onClick={(e) => go(e, "/#start")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
+            <Link href="/#start" onClick={(e) => go(e, "/#start")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
               Start building <span aria-hidden className={arrowClass}>↗</span>
-            </a>
+            </Link>
             <p className="mt-6 font-mono text-xs text-ink-3">Humans only for the actions that matter.</p>
           </motion.div>
         )}

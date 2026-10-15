@@ -1,45 +1,69 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useMotionValueEvent, useScroll } from "motion/react";
-import { DOCS_URL } from "@/lib/site";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { CONSOLE_URL, DOCS_URL } from "@/lib/site";
 import { ActionSculpture } from "./ActionSculpture";
 
-const CHAPTERS = [
-  { number: "01", eyebrow: "Your rules. The final say.", title: "A boundary you can read.", text: "Hold payments over $500. Block deletes in production. Allow reads. Put the policy in YAML, review it in Git, and know exactly why an action stopped.", code: "payment.amount > 500 → HOLD", label: "Rule matched", tone: "hold" },
-  { number: "02", eyebrow: "A pause. Then a person.", title: "One tap. Back in motion.", text: "A $600 payment waits in Slack, with its arguments, the rule that caught it, and a risk score alongside. Approve to resume. Deny to abort. No answer? Denied.", code: "approved_by: you\nstatus: resumed", label: "Human approved", tone: "allow" },
-  { number: "03", eyebrow: "The action leaves a trace.", title: "Nothing lost between steps.", text: "The action, policy, score and human decision become one verifiable story. Every audit entry connects to the one before it. Search it. Export it. Prove what happened.", code: "previous_hash → entry → next_hash", label: "Chain verified", tone: "allow" },
-] as const;
+const STEPS = ["The action", "Your rules", "A human", "The record"];
+const WINDOWS = [[0, 0, .18, .25], [.23, .30, .43, .50], [.48, .55, .70, .77], [.75, .83, 1, 1]];
+
+function StoryPanel({ index, progress, active, children }: { index: number; progress: MotionValue<number>; active: boolean; children: React.ReactNode }) {
+  const reduce = useReducedMotion();
+  const opacity = useTransform(progress, WINDOWS[index], index === 0 ? [1, 1, 1, 0] : index === 3 ? [0, 1, 1, 1] : [0, 1, 1, 0]);
+  const y = useTransform(progress, WINDOWS[index], [index === 0 ? 0 : 35, 0, 0, -35]);
+  return <motion.div className={`paper-panel paper-panel-${index}`} style={{ opacity, y: reduce ? 0 : y, pointerEvents: active ? "auto" : "none" }} aria-hidden={!active} inert={!active}>{children}</motion.div>;
+}
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const [chapter, setChapter] = useState(0);
-  useMotionValueEvent(scrollYProgress, "change", (v) => setChapter(Math.min(3, Math.floor(v * 3.65))));
-  return (
-    <section ref={ref} className="action-journey" aria-labelledby="hero-title">
-      <div className="journey-intro">
-        <p className="label hero-eyebrow"><span className="status-dot" /> The approval layer for AI agents</p>
-        <h1 id="hero-title" className="display-tight hero-heading">Let your<br />agent act.<br /><span className="text-ink-3">Keep the</span><br /><span className="hero-last-word">last word.</span></h1>
-        <p className="hero-description">Ship the agent. Set the boundaries. Get a say before a payment, a delete, or an email becomes permanent.</p>
-        <div className="hero-actions"><a className="site-cta" href="#start">Start building <span aria-hidden>↗</span></a><a className="text-link" href={`${DOCS_URL}/quickstart`}>Read the docs <span aria-hidden>→</span></a></div>
-        <p className="hero-footnote">Rules enforce. Smart scoring observes. You stay in control.</p>
-        <a href="#how" className="scroll-cue"><span aria-hidden>↓</span> Follow an action</a>
+  const activeChapter = useRef(0);
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const next = v < .24 ? 0 : v < .49 ? 1 : v < .76 ? 2 : 3;
+    if (next !== activeChapter.current) { activeChapter.current = next; setChapter(next); }
+  });
+  const jump = (i: number) => {
+    const el = ref.current; if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: top + (el.offsetHeight - window.innerHeight) * [0, .34, .62, .94][i], behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+  };
+  return <section ref={ref} id="how" className="paper-story" aria-labelledby="hero-title">
+    <div className="paper-viewport">
+      <div className="paper-folio" aria-hidden><span>ABEYANCE / AUTONOMY, ACCOUNTED FOR.</span><span>EST. 2026 · SYDNEY</span></div>
+      <ActionSculpture progress={scrollYProgress} />
+      <div className="paper-copy">
+        <StoryPanel index={0} progress={scrollYProgress} active={chapter === 0}>
+          <p className="hero-eyebrow"><span className="brand-asterisk" aria-hidden>✳</span> APPROVALS & AUDIT FOR AI AGENTS</p>
+          <h1 id="hero-title" className="hero-heading">Autonomy.<br />With a <em>pause.</em></h1>
+          <p className="hero-description">Let your agent do its thing. Get the last word before it moves money, deletes a file, or hits send.</p>
+          <div className="hero-actions"><a className="site-cta" href={`${CONSOLE_URL}/login?mode=signup`}>Start building <span aria-hidden>↗</span></a><a className="text-link" href={`${DOCS_URL}/quickstart`}>Read the docs <span aria-hidden>→</span></a></div>
+          <p className="hero-footnote">One guard. Your rules. A record of everything.</p>
+        </StoryPanel>
+        <StoryPanel index={1} progress={scrollYProgress} active={chapter === 1}>
+          <p className="hero-eyebrow">01 / THE RIGHT KIND OF FRICTION</p>
+          <h2 className="hero-heading">A line<br />you <em>draw.</em></h2>
+          <p className="hero-description">A $600 payment meets your $500 rule. Abeyance holds it before anything runs. Reads go through. Production deletes stop.</p>
+          <div className="story-rule"><span className="story-verdict">Ⅱ HOLD</span><code>amount &gt; 500</code><span>rule / payment_limit</span></div>
+          <p className="hero-footnote">Jev adds a risk score alongside the decision.<br />Your rules make the call.</p>
+        </StoryPanel>
+        <StoryPanel index={2} progress={scrollYProgress} active={chapter === 2}>
+          <p className="hero-eyebrow">02 / A PERSON IN THE LOOP</p>
+          <h2 className="hero-heading">Your call.<br /><em>Then go.</em></h2>
+          <p className="hero-description">The payment lands in Slack with the rule, redacted arguments and risk reasons. One tap to approve. Your agent picks up where it left off.</p>
+          <div className="story-rule"><span className="story-verdict story-approved">↗ APPROVED</span><code>send_payment($600)</code><span>status / resumed</span></div>
+          <p className="hero-footnote">Deny to abort. No response? Denied by default.</p>
+        </StoryPanel>
+        <StoryPanel index={3} progress={scrollYProgress} active={chapter === 3}>
+          <p className="hero-eyebrow">03 / A PAPER TRAIL, WITHOUT THE PAPERWORK</p>
+          <h2 className="hero-heading">Every action.<br /><em>On record.</em></h2>
+          <p className="hero-description">The action, the policy, the score, the person who said yes. Linked in a tamper-evident audit log. Ready to search, export and verify.</p>
+          <div className="story-rule"><span className="story-verdict story-approved">✓ VERIFIED</span><code>previous_hash → next_hash</code><span>signature / Ed25519</span></div>
+          <a className="text-link mt-6" href="#start">Make your first guard <span aria-hidden>↓</span></a>
+        </StoryPanel>
       </div>
-      <div className="journey-art"><div className="journey-stage">
-        <div className="scene-corner scene-corner-top"><span>AB / ACTION CONTROL</span><span>ILLUSTRATIVE SEQUENCE</span></div>
-        <ActionSculpture progress={scrollYProgress} />
-        <div className={`scene-receipt scene-receipt-${chapter}`}>
-          <div className="scene-receipt-header"><span className={`receipt-status ${chapter === 1 ? "text-hold" : chapter > 1 ? "text-allow" : "text-ink-2"}`}><span className="status-dot" />{["Action proposed", "Held by your rule", "Approved in Slack", "Recorded forever"][chapter]}</span><span className="text-ink-3">#000042</span></div>
-          <div className="receipt-amount"><span>send_payment</span><strong>$600<span>.00</span></strong></div>
-          <div className="receipt-meta"><span>agent / accounts-payable</span><span>{["awaiting policy", "amount > $500", "approved → resume", "SHA-256 · verified"][chapter]}</span></div>
-          <div className="receipt-score"><span>Jev <span className="shadow-badge">SHADOW</span></span><span>0.78 risk <span className="text-ink-3">/ new payee</span></span></div>
-        </div>
-        <div className="scene-corner scene-corner-bottom"><span>{String(chapter + 1).padStart(2, "0")} / 04</span><span>{["PROPOSE", "CHECK", "APPROVE", "RECORD"][chapter]}</span><span className="scene-progress"><i style={{ transform: `scaleX(${(chapter + 1) / 4})` }} /></span></div>
-      </div></div>
-      <div id="how" className="journey-chapters">{CHAPTERS.map((item) => <article className="journey-chapter" key={item.number}>
-        <p className="label"><span className="chapter-number">{item.number}</span>{item.eyebrow}</p><h2 className="display-tight">{item.title}</h2><p>{item.text}</p><div className="chapter-code"><span className={item.tone === "hold" ? "text-hold" : "text-allow"}>{item.label}</span><code>{item.code}</code></div>
-      </article>)}</div>
-    </section>
-  );
+      <div className="paper-bottom"><p className="paper-scroll"><span aria-hidden>↓</span> Scroll to follow the action</p><nav aria-label="Action story" className="story-navigation">{STEPS.map((step, i) => <button type="button" key={step} onClick={() => jump(i)} aria-current={chapter === i ? "step" : undefined}><span>{String(i + 1).padStart(2, "0")}</span>{step}<i /></button>)}</nav><span className="paper-caption">INTERACTIVE PRODUCT ILLUSTRATION</span></div>
+    </div>
+  </section>;
 }

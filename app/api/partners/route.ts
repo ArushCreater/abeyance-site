@@ -169,15 +169,15 @@ function confirmHtml(lead: PartnerRequest) {
   const company = escapeHtml(lead.company);
   return `<!doctype html>
 <html>
-  <body style="margin:0;padding:0;background:#0b0b0c;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0b0b0c;">
+  <body style="margin:0;padding:0;background:#f8f7f3;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f7f3;">
       <tr>
         <td style="padding:48px 24px;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#ece8e1;">
-            <tr><td style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#eba43f;padding-bottom:20px;">Received</td></tr>
-            <tr><td style="font-size:28px;font-weight:300;line-height:1.2;padding-bottom:20px;">Held for a person.</td></tr>
-            <tr><td style="font-size:16px;line-height:1.6;color:#b5b2ab;padding-bottom:28px;">Thanks, ${name}. We have your design partner request for ${company}. One of the founders will write back within two working days.</td></tr>
-            <tr><td style="border-top:1px solid #26262a;padding-top:20px;font-size:13px;color:#77746e;">Abeyance</td></tr>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#202923;">
+            <tr><td style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#99501c;padding-bottom:20px;">Received</td></tr>
+            <tr><td style="font-size:28px;font-weight:600;line-height:1.2;padding-bottom:20px;">Held for a person.</td></tr>
+            <tr><td style="font-size:16px;line-height:1.6;color:#505c53;padding-bottom:28px;">Thanks, ${name}. We have your design partner request for ${company}. One of the founders will write back within two working days.</td></tr>
+            <tr><td style="border-top:1px solid #d7dbd4;padding-top:20px;font-size:20px;font-weight:900;letter-spacing:-0.04em;color:#202923;">ABEYANCE</td></tr>
           </table>
         </td>
       </tr>
