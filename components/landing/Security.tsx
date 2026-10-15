@@ -31,8 +31,8 @@ export function Security() {
   return (
     <section id="security" aria-labelledby="sec-title" className="border-t border-line bg-sunken/60">
       <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-28 lg:py-40">
-        <p className="label">Security &amp; audit</p>
-        <h2 id="sec-title" className="display-tight mt-5 max-w-[17ch] text-[clamp(2.2rem,5.5vw,4.25rem)] font-[300]">
+
+        <h2 id="sec-title" className="display-tight max-w-[17ch] text-[clamp(2.2rem,5.5vw,4.25rem)] font-[300]">
           A record you can stand behind.
         </h2>
         <a href={`${DOCS_URL}/security`} className="group mt-6 inline-flex items-center gap-2 py-2 text-sm text-ink-2 transition-colors hover:text-ink">

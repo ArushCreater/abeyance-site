@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { Placeholder } from "@/components/legal/Placeholder";
-import { ExampleTag } from "@/components/ui/ExampleTag";
 import { LEGAL_DOCS } from "@/lib/legal";
 import { DOCS_URL, SIGN_IN_URL } from "@/lib/site";
 import { FooterCTA } from "./FooterCTA";
@@ -70,10 +69,6 @@ export function SiteFooter() {
           <div className="flex flex-col items-start">
             <Logo />
             <p className="mt-4 max-w-[30ch] text-sm leading-relaxed text-ink-3">The approval and audit layer for AI agents.</p>
-            <p className="label mt-8">Made in Sydney</p>
-            <p aria-hidden className="mt-1.5 font-mono text-[11px] tracking-[0.04em] text-ink-4">
-              33.87° S · 151.21° E
-            </p>
           </div>
 
           <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-4 md:gap-x-8">
@@ -99,12 +94,6 @@ export function SiteFooter() {
             </p>
             <p>All figures on this site are example data from a simulated deployment.</p>
           </div>
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] text-ink-3">
-            <ExampleTag>Example</ExampleTag>
-            <span>
-              ledger <span aria-hidden className="text-ink-4">·</span> seq 000000 <span aria-hidden className="text-ink-4">·</span> sha256 9f3c…e1
-            </span>
-          </p>
         </div>
       </div>
     </footer>

@@ -60,18 +60,18 @@ export function SiteHeader() {
           <ul className="hidden items-center gap-1 lg:flex">
             {LINKS.map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="rounded-full px-3 py-2 text-sm text-ink-2 transition-colors hover:text-ink">
+                <a href={l.href} className="rounded-full px-2.5 py-2 text-[13px] text-ink-2 transition-colors hover:text-ink">
                   {l.label}
                 </a>
               </li>
             ))}
             <li>
-              <a href={DOCS_URL} className="rounded-full px-3 py-2 text-sm text-ink-2 transition-colors hover:text-ink">
+              <a href={DOCS_URL} className="rounded-full px-2.5 py-2 text-[13px] text-ink-2 transition-colors hover:text-ink">
                 Docs
               </a>
             </li>
           </ul>
-          <a href={SIGN_IN_URL} className="hidden rounded-full px-3 py-2 text-sm text-ink-2 transition-colors hover:text-ink sm:inline-flex">
+          <a href={SIGN_IN_URL} className="hidden rounded-full px-2.5 py-2 text-[13px] text-ink-2 transition-colors hover:text-ink sm:inline-flex">
             Sign in
           </a>
           <Link href="/#start" className={buttonClass("primary", "nav-start whitespace-nowrap !h-10 !px-5")}>
@@ -128,7 +128,6 @@ export function SiteHeader() {
             <Link href="/#start" onClick={(e) => go(e, "/#start")} className={buttonClass("primary", "mt-8 !h-12 w-full text-base")}>
               Start building <span aria-hidden className={arrowClass}>↗</span>
             </Link>
-            <p className="mt-6 font-mono text-xs text-ink-3">Humans only for the actions that matter.</p>
           </motion.div>
         )}
       </AnimatePresence>
