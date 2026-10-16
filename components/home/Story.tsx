@@ -96,26 +96,13 @@ export function Story() {
         </Figure>
       </Section>
 
-      <Section id="pricing" title="Pricing">
+      <Section id="pricing" title="Free to start">
         <Prose>
-          <p>Start with one agent for free. Pay when you need more of it.</p>
+          <p>
+            One agent, 1,000 actions a month, Slack approvals and shadow scoring cost nothing. Pay when you need more agents, a longer memory or signed evidence.{" "}
+            <a href="/pricing">See pricing</a>.
+          </p>
         </Prose>
-        <div className="mx-auto mt-10 grid max-w-[900px] gap-px overflow-hidden rounded-[14px] border border-line bg-line px-0 sm:grid-cols-2">
-          <Plan
-            name="Free"
-            price="$0"
-            per="to start"
-            items={["1 agent", "1,000 actions a month", "7 days of audit log", "YAML rules and Slack approvals", "Jev shadow scoring"]}
-            cta={{ href: `${CONSOLE_URL}/login?mode=signup`, label: "Start free" }}
-          />
-          <Plan
-            name="Team"
-            price="Usage"
-            per="based"
-            items={["More agents and actions", "Unlimited audit log", "CSV exports and signed evidence reports", "Assisted mode, when you opt in", "SSO"]}
-            cta={{ href: "/partners", label: "Talk to us" }}
-          />
-        </div>
       </Section>
 
       <Section id="questions" title="Questions">
@@ -150,28 +137,6 @@ export function Story() {
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-function Plan({ name, price, per, items, cta }: { name: string; price: string; per: string; items: string[]; cta: { href: string; label: string } }) {
-  return (
-    <div className="flex flex-col bg-white p-7 sm:p-9">
-      <p className="text-[14px] font-medium text-ink">{name}</p>
-      <p className="mt-3 font-serif text-[2.6rem] leading-none tracking-[-0.02em] text-ink">
-        {price} <span className="font-sans text-[14px] tracking-normal text-ink-3">{per}</span>
-      </p>
-      <ul className="mt-7 flex-1 space-y-2.5 text-[14.5px] text-ink-2">
-        {items.map((i) => (
-          <li key={i} className="flex gap-3">
-            <span aria-hidden className="mt-[9px] h-px w-3 shrink-0 bg-ink-4" />
-            {i}
-          </li>
-        ))}
-      </ul>
-      <a href={cta.href} className="mt-8 inline-flex h-10 w-fit items-center rounded-full border border-line-strong px-5 text-[14px] text-ink transition-colors hover:border-ink/50">
-        {cta.label}
-      </a>
     </div>
   );
 }
