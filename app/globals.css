@@ -701,3 +701,104 @@ section[id] {
 @supports not (backdrop-filter: blur(1px)) {
   .island { background: rgb(255 255 255 / 0.97); }
 }
+
+/* ---------------------------------------------------------------- */
+/* Launch intro: five seconds, once per session.                      */
+/*   0.0–1.0  the field blooms out of paper, vivid and moving         */
+/*   0.5–1.9  the mark's three pieces fold into place                 */
+/*   1.6–2.4  the name                                                */
+/*   3.4–4.4  colour drains to paper; the lockup lifts and fades      */
+/*   4.3–5.0  the veil lifts off the page                             */
+/* ---------------------------------------------------------------- */
+.intro { display: none; }
+.intro-playing .intro {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--color-bg);
+  animation: intro-veil 5s linear forwards;
+}
+.intro-skip .intro { animation: intro-out 0.45s ease forwards; }
+.intro-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* A full-bleed base, so the whole screen is colour, with the blooms moving over it. */
+  background:
+    radial-gradient(120% 90% at 20% 15%, #2a3fae 0%, transparent 60%),
+    radial-gradient(110% 90% at 85% 90%, #f0a23e 0%, transparent 55%),
+    linear-gradient(135deg, #2c47bd 0%, #4f63d6 30%, #b8607f 55%, #ec6a3a 75%, #f2a847 100%);
+  animation: intro-drain 5s ease forwards;
+}
+.intro-field::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(from 0deg at 50% 50%, rgb(255 255 255 / 0), rgb(255 255 255 / 0.12), rgb(255 255 255 / 0), rgb(255 255 255 / 0.1), rgb(255 255 255 / 0));
+  filter: blur(40px);
+  animation: intro-sweep 5s linear forwards;
+}
+@keyframes intro-sweep { from { transform: rotate(0deg); } to { transform: rotate(80deg); } }
+.intro-field .field-grain { position: absolute; inset: 0; opacity: 0.18; }
+.intro-blob { position: absolute; display: block; border-radius: 50%; filter: blur(70px); will-change: transform; }
+.intro-cobalt {
+  width: 78vmax; height: 78vmax; left: -24vmax; top: -30vmax;
+  background: radial-gradient(closest-side, rgb(34 56 170 / 0.95), rgb(34 56 170 / 0.4) 60%, transparent);
+  animation: intro-a 5s cubic-bezier(0.3, 0.1, 0.3, 1) forwards;
+}
+.intro-ember {
+  width: 70vw; height: 26vw; min-height: 180px; left: 18vw; top: 40%;
+  background: radial-gradient(closest-side, rgb(255 98 48 / 0.95), rgb(255 120 60 / 0.45) 58%, transparent);
+  animation: intro-b 5s cubic-bezier(0.3, 0.1, 0.3, 1) forwards;
+}
+.intro-amber {
+  width: 48vmax; height: 48vmax; right: -16vmax; bottom: -20vmax;
+  background: radial-gradient(closest-side, rgb(244 178 72 / 0.85), transparent 70%);
+  animation: intro-c 5s cubic-bezier(0.3, 0.1, 0.3, 1) forwards;
+}
+.intro-sky {
+  width: 44vmax; height: 44vmax; right: 4vmax; top: -18vmax;
+  background: radial-gradient(closest-side, rgb(128 162 255 / 0.85), transparent 70%);
+  animation: intro-d 5s cubic-bezier(0.3, 0.1, 0.3, 1) forwards;
+}
+.intro-lockup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+  animation: intro-lockup 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.intro-mark { width: clamp(68px, 9vw, 112px); height: auto; overflow: visible; filter: drop-shadow(0 12px 32px rgb(16 20 60 / 0.35)); }
+.intro-piece { fill: #fff; opacity: 0; transform-box: view-box; transform-origin: 50% 50%; }
+.intro-piece-0 { animation: intro-fold-0 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.intro-piece-1 { animation: intro-fold-1 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.intro-piece-2 { animation: intro-fold-2 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.intro-name {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+  letter-spacing: -0.015em;
+  color: #fff;
+  text-shadow: 0 6px 24px rgb(16 20 60 / 0.3);
+  opacity: 0;
+  animation: intro-name 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes intro-veil { 0%, 70% { opacity: 1; } 97% { opacity: 0; } 100% { opacity: 0; visibility: hidden; } }
+@keyframes intro-out { to { opacity: 0; visibility: hidden; } }
+@keyframes intro-drain { 0% { opacity: 0; } 16% { opacity: 1; } 64% { opacity: 1; } 90% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes intro-a { from { transform: translate(-6vmax, -4vmax) scale(0.9); } to { transform: translate(14vmax, 10vmax) scale(1.15); } }
+@keyframes intro-b { from { transform: translateX(-30vw) rotate(-20deg); } to { transform: translateX(16vw) rotate(-8deg); } }
+@keyframes intro-c { from { transform: translate(8vmax, 6vmax) scale(0.85); } to { transform: translate(-12vmax, -10vmax) scale(1.1); } }
+@keyframes intro-d { from { transform: translate(6vmax, -4vmax); } to { transform: translate(-16vmax, 12vmax) scale(1.2); } }
+/* Each piece arrives from its own direction and settles into the aperture. */
+@keyframes intro-fold-0 { 0%, 10% { opacity: 0; transform: translate(-14%, -10%) rotate(-14deg) scale(0.9); } 34% { opacity: 1; transform: none; } 100% { opacity: 1; transform: none; } }
+@keyframes intro-fold-1 { 0%, 16% { opacity: 0; transform: translate(14%, -6%) rotate(12deg) scale(0.9); } 38% { opacity: 1; transform: none; } 100% { opacity: 1; transform: none; } }
+@keyframes intro-fold-2 { 0%, 22% { opacity: 0; transform: translate(0, 14%) rotate(-8deg) scale(0.9); } 42% { opacity: 1; transform: none; } 100% { opacity: 1; transform: none; } }
+@keyframes intro-name { 0%, 32% { opacity: 0; transform: translateY(8px); letter-spacing: 0.08em; filter: blur(4px); } 48% { opacity: 1; transform: none; letter-spacing: -0.015em; filter: blur(0); } 100% { opacity: 1; } }
+/* As colour drains, the white lockup becomes ink, then lifts away. */
+@keyframes intro-lockup { 0%, 64% { opacity: 1; transform: none; } 84% { opacity: 0; transform: translateY(-10px) scale(0.98); } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .intro-playing .intro { display: none; } }

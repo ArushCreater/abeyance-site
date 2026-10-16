@@ -34,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-AU" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en-AU" suppressHydrationWarning className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body className="min-h-dvh bg-bg text-ink antialiased">
         <a
           href="#main"
