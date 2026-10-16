@@ -1,132 +1,96 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ScrollLogo } from "@/components/brand/ScrollLogo";
-import { arrowClass } from "@/components/ui/button";
+import { Logo } from "@/components/brand/Logo";
 import { CONSOLE_URL, DOCS_URL, SIGN_IN_URL } from "@/lib/site";
-import { spring } from "@/lib/motion";
 
 const LINKS = [
-  { href: "/#how", label: "Product" },
-  { href: "/#start", label: "Developers" },
+  { href: DOCS_URL, label: "Docs" },
   { href: "/#pricing", label: "Pricing" },
+  { href: "/security", label: "Security" },
+  { href: SIGN_IN_URL, label: "Sign in" },
 ];
 
+/**
+ * A quiet bar: the mark and name on the left, a few words on the right.
+ * Transparent over the hero; a hairline and a little frost once you scroll.
+ */
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
 
-  // Section links on the home page: close the menu (which unlocks scrolling), then glide there.
-  // Anywhere else they're ordinary links to /#section.
-  const go = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    setOpen(false);
-    if (!href.startsWith("/#") || pathname !== "/") return;
-    e.preventDefault();
-    const hash = href.slice(1);
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        document.querySelector(hash)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
-        history.replaceState(null, "", hash);
-      }),
-    );
-  };
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 24);
+    queueMicrotask(on);
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
 
-  // Lock the page behind the menu, and close it on Escape or when the layout grows past it.
   useEffect(() => {
     if (!open) return;
-    const root = document.documentElement;
-    root.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    const wide = window.matchMedia("(min-width: 1024px)");
-    const onWide = () => wide.matches && setOpen(false);
     window.addEventListener("keydown", onKey);
-    wide.addEventListener("change", onWide);
     return () => {
-      root.style.overflow = "";
+      document.documentElement.style.overflow = "";
       window.removeEventListener("keydown", onKey);
-      wide.removeEventListener("change", onWide);
     };
   }, [open]);
 
   return (
-    <header className="site-header">
-      <nav aria-label="Main" className="glass-navbar">
-        <ScrollLogo className="nav-wordmark" />
-        <div className="flex items-center gap-1 sm:gap-2">
-          <ul className="hidden items-center gap-1 lg:flex">
+    <header
+      className={`fixed inset-x-0 top-0 z-40 pt-[env(safe-area-inset-top,0px)] transition-[background-color,border-color,backdrop-filter] duration-300 ${
+        scrolled || open ? "border-b border-line bg-bg/85 backdrop-blur-md" : "border-b border-transparent"
+      }`}
+    >
+      <nav aria-label="Main" className="mx-auto flex h-16 max-w-[1240px] items-center justify-between px-5 sm:px-8">
+        <Logo />
+        <div className="flex items-center gap-1">
+          <ul className="hidden items-center md:flex">
             {LINKS.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className="rounded-full px-2.5 py-2 text-[13px] text-ink-2 transition-colors hover:text-ink">
+              <li key={l.label}>
+                <a href={l.href} className="px-3 py-2 text-[14px] text-ink-2 transition-colors hover:text-ink">
                   {l.label}
                 </a>
               </li>
             ))}
-            <li>
-              <a href={DOCS_URL} className="rounded-full px-2.5 py-2 text-[13px] text-ink-2 transition-colors hover:text-ink">
-                Docs
-              </a>
-            </li>
           </ul>
-          <a href={SIGN_IN_URL} className="hidden rounded-full px-2.5 py-2 text-[13px] text-ink-2 transition-colors hover:text-ink sm:inline-flex">
-            Sign in
+          <a
+            href={`${CONSOLE_URL}/login?mode=signup`}
+            className="ml-2 hidden h-9 items-center rounded-full bg-ink px-4 text-[14px] font-medium text-bg transition-opacity hover:opacity-85 sm:inline-flex"
+          >
+            Start free
           </a>
-          <Link href={`${CONSOLE_URL}/login?mode=signup`} className="site-cta nav-start">
-            Start free <span aria-hidden className={arrowClass}>↗</span>
-          </Link>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="-mr-2 grid size-11 place-items-center rounded-full text-ink-2 transition-colors active:bg-raised lg:hidden"
+            aria-controls="site-menu"
+            className="-mr-2 px-3 py-2 text-[14px] text-ink md:hidden"
           >
-            <span aria-hidden className="relative block h-3 w-5">
-              <span className={`absolute left-0 h-px w-5 bg-current transition-transform duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
-              <span className={`absolute left-0 top-1.5 h-px w-5 bg-current transition-opacity duration-200 ${open ? "opacity-0" : ""}`} />
-              <span className={`absolute left-0 h-px w-5 bg-current transition-transform duration-300 ${open ? "top-1.5 -rotate-45" : "top-3"}`} />
-            </span>
+            {open ? "Close" : "Menu"}
           </button>
         </div>
       </nav>
-
       <AnimatePresence>
         {open && (
           <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8, transition: { duration: 0.18 } }}
-            transition={spring.settle}
-            className="glass-mobile-menu lg:hidden"
+            id="site-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+            className="h-[calc(100dvh-4rem)] overflow-y-auto px-5 pb-10 pt-4 md:hidden"
           >
-            <ul className="divide-y divide-line">
-              {[...LINKS, { href: DOCS_URL, label: "Documentation" }, { href: SIGN_IN_URL, label: "Sign in" }].map((l, i) => (
-                <motion.li
-                  key={l.href}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...spring.settle, delay: 0.03 * i }}
-                >
-                  <a
-                    href={l.href}
-                    onClick={(e) => go(e, l.href)}
-                    className="flex items-center justify-between py-4 font-display text-[1.75rem] font-[340] tracking-[-0.02em] text-ink [font-variation-settings:'wdth'_86]"
-                  >
+            <ul>
+              {[...LINKS, { href: `${CONSOLE_URL}/login?mode=signup`, label: "Start free" }].map((l, i) => (
+                <motion.li key={l.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.03 * i }} className="border-b border-line">
+                  <a href={l.href} onClick={() => setOpen(false)} className="block py-4 font-serif text-[1.9rem] leading-tight text-ink">
                     {l.label}
-                    <span aria-hidden className="font-sans text-base text-ink-4">
-                      {l.href.startsWith("/#") ? "↓" : "↗"}
-                    </span>
                   </a>
                 </motion.li>
               ))}
             </ul>
-            <Link href={`${CONSOLE_URL}/login?mode=signup`} className="site-cta mt-6 w-full">
-              Start free <span aria-hidden className={arrowClass}>↗</span>
-            </Link>
           </motion.div>
         )}
       </AnimatePresence>

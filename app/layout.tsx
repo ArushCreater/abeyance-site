@@ -1,24 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, IBM_Plex_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+// Newsreader carries the voice (headlines and prose); Geist the interface; Geist Mono the code.
+const serif = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
   display: "swap",
 });
-
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
+const sans = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
+const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: {
-    default: "Abeyance — Control what your AI agents can do.",
+    default: "Abeyance — Approval and audit for AI agent actions",
     template: "%s · Abeyance",
   },
   description:
@@ -27,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbfbfd",
+  themeColor: "#fbfbf9",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
@@ -36,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-AU" className={`${manrope.variable} ${plexMono.variable}`}>
+    <html lang="en-AU" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body className="min-h-dvh bg-bg text-ink antialiased">
         <a
           href="#main"

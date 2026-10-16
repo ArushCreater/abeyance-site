@@ -6,19 +6,19 @@
  */
 @theme {
   /* Surfaces */
-  --color-bg: #fbfbfd;
+  --color-bg: #fbfbf9;
   --color-brand: #ec5836;
   --color-cobalt: #3458d4;
   --color-raised: #ffffff;
-  --color-sunken: #f0f2f8;
-  --color-line: rgb(20 27 43 / 0.10);
-  --color-line-strong: rgb(20 27 43 / 0.20);
+  --color-sunken: #f2f1ed;
+  --color-line: rgb(21 23 28 / 0.09);
+  --color-line-strong: rgb(21 23 28 / 0.18);
 
   /* Ink-4 is reserved for decorative marks, never essential text. */
-  --color-ink: #141b2b;
-  --color-ink-2: #505c72;
-  --color-ink-3: #647086;
-  --color-ink-4: #8d96a8;
+  --color-ink: #15171c;
+  --color-ink-2: #4a4f5a;
+  --color-ink-3: #6b707b;
+  --color-ink-4: #9a9ea6;
 
   /* Decision states */
   --color-hold: #99501c;
@@ -33,9 +33,11 @@
   --color-chart-hold: #af6a30;
 
   /* Type */
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --color-ember: #d9572e;
 
   --text-micro: 0.6875rem;
   --text-micro--line-height: 1rem;
@@ -590,3 +592,74 @@ section[id] {
 }
 @media(max-height:780px) and (min-width:901px) { .hero-viewport { min-height:650px; }.hero-layout { padding-top:75px; }.hero-copy h1 { font-size:clamp(58px,6.2vw,82px); }.hero-visual { height:550px; }.hero-description { font-size:15px; margin-top:20px; }.hero-actions { margin-top:22px; }.hero-continue { padding-bottom:16px; } }
 @media(prefers-reduced-motion:reduce) { .aperture-story { height:auto; }.hero-viewport { position:relative; }.aperture-still { transform:none; }.story-track { display:none; } }
+
+/* ---------------------------------------------------------------- */
+/* Home: the field of light behind the opening sentence.             */
+/* ---------------------------------------------------------------- */
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #e6eaf3 0%, #eeeef0 42%, #f6f4f0 72%, var(--color-bg) 100%);
+}
+.field > span { position: absolute; display: block; pointer-events: none; }
+.field-bloom {
+  width: 72vmax; height: 72vmax; left: -22vmax; top: -38vmax;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(52 88 212 / 0.42), rgb(52 88 212 / 0.12) 55%, transparent);
+  filter: blur(30px);
+  animation: field-bloom 34s var(--ease-suspend) infinite alternate;
+}
+.field-ember {
+  width: 52vw; height: 11vw; min-height: 70px; left: 20vw; top: 30%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(239 112 62 / 0.85), rgb(236 132 72 / 0.38) 52%, transparent);
+  filter: blur(26px);
+  transform: translateX(-14vw) rotate(-14deg);
+  animation: field-ember 22s cubic-bezier(0.3, 0.1, 0.2, 1) infinite alternate;
+}
+.field-haze {
+  inset: auto 0 0 0; height: 62%;
+  background: radial-gradient(70% 90% at 50% 100%, rgb(251 251 249 / 0.95), rgb(251 251 249 / 0) 75%);
+}
+.field-grain {
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes field-bloom {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(8vmax, 5vmax) scale(1.08); }
+}
+/* Travels, all but stops (held), then goes on. */
+@keyframes field-ember {
+  0% { transform: translateX(-16vw) rotate(-15deg); opacity: 0.85; }
+  45% { transform: translateX(-1vw) rotate(-13deg); opacity: 1; }
+  78% { transform: translateX(0.5vw) rotate(-13deg); opacity: 1; }
+  100% { transform: translateX(14vw) rotate(-11deg); opacity: 0.9; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .field-bloom, .field-ember { animation: none; }
+}
+
+/* The essay's reading column. */
+.prose-col p {
+  font-family: var(--font-serif);
+  font-size: clamp(1.09rem, 1.35vw, 1.22rem);
+  line-height: 1.62;
+  color: rgb(21 23 28 / 0.86);
+  font-variation-settings: "opsz" 18;
+}
+.prose-col p + p { margin-top: 1.05em; }
+.prose-col h2 + p, .prose-col p:first-child { margin-top: 0.9rem; }
+.prose-col code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  padding: 0.08em 0.32em;
+  border-radius: 4px;
+  background: var(--color-sunken);
+  color: var(--color-ink);
+}
+.prose-col a { text-decoration: underline; text-decoration-color: rgb(21 23 28 / 0.25); text-underline-offset: 4px; }
+.prose-col a:hover { text-decoration-color: currentColor; }
