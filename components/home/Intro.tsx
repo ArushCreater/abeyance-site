@@ -3,7 +3,7 @@ import { IntroController } from "./IntroController";
 
 /**
  * The launch intro, once per session: the mark folds together over a vivid,
- * moving field of the hero's colours, the name appears, then everything
+ * moving field of the hero's colours, then everything
  * drains to paper and the page shows through. About five seconds; any click,
  * key or scroll skips it; reduced motion skips it entirely.
  *
@@ -30,7 +30,6 @@ export function Intro() {
               <path key={i} d={d} className={`intro-piece intro-piece-${i}`} />
             ))}
           </svg>
-          <span className="intro-name">Abeyance</span>
         </div>
       </div>
       <IntroController />
