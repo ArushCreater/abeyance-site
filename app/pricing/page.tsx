@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import { Plans } from "@/components/home/Plans";
 import { InstallLine } from "@/components/home/InstallLine";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { DOCS_URL } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Pricing",
-  description: "Free for your first agent: 1,000 actions a month, Slack approvals and shadow scoring. Pay when your agents do more.",
-};
+  description:
+    "Free for your first agent: 1,000 actions a month, Slack approvals and shadow scoring. Pay when your agents do more.",
+  path: "/pricing",
+});
 
 const COMPARE: { feature: string; free: string; team: string }[] = [
   { feature: "Agents", free: "1", team: "As many as you need" },

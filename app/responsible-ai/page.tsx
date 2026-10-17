@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, type LegalSection } from "@/components/legal/LegalLayout";
 import { CONTACT_EMAIL } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Responsible AI",
   description:
     "What the models inside Abeyance do and never do, how human oversight is built in, how it relates to EU AI Act Article 14 and APRA CPS 230, and its limitations.",
-};
+  path: "/responsible-ai",
+});
 
 const SECTIONS: LegalSection[] = [
   {

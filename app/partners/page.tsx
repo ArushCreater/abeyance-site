@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { PartnerForm } from "@/components/partners/PartnerForm";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Design partners",
   description:
     "We’re working with a small number of regulated teams who have agents ready to go but can’t risk the irreversible actions. Request a conversation.",
-};
+  path: "/partners",
+});
 
 const GET = [
   "A shadow-mode report on your own agent traffic",

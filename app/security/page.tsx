@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, type LegalSection } from "@/components/legal/LegalLayout";
 import { SECURITY_EMAIL } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Security",
   description:
     "How Abeyance protects decisions, credentials and the ledger: fail-closed decisions, a hash-chained append-only ledger, PII redaction, SSO and role-based access.",
-};
+  path: "/security",
+});
 
 const SECTIONS: LegalSection[] = [
   {

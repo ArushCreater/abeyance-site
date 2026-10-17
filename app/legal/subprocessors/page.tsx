@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, LegalTable, type LegalSection } from "@/components/legal/LegalLayout";
 import { Placeholder, PRIVACY_EMAIL } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Subprocessors",
   description:
     "The third parties that process customer data for Abeyance, what each receives and where, plus the integrations customers can enable themselves.",
-};
+  path: "/legal/subprocessors",
+});
 
 const CONFIRM = <Placeholder>CONFIRM REGION</Placeholder>;
 

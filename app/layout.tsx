@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Newsreader carries the voice (headlines and prose); Geist the interface; Geist Mono the code.
@@ -14,14 +15,18 @@ const serif = Newsreader({
 const sans = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
 const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
+const HOME_TITLE = "Abeyance — Approval and audit for AI agent actions";
+const HOME_DESCRIPTION =
+  "Abeyance asks before your AI agents do anything that matters. Rules decide what runs, what waits for a person in Slack, and what never happens, with a tamper-evident audit log. Install in five minutes.";
+
 export const metadata: Metadata = {
-  title: {
-    default: "Abeyance — Approval and audit for AI agent actions",
-    template: "%s · Abeyance",
-  },
-  description:
-    "The approval and audit layer for AI agents. Set rules, approve actions in Slack, and keep a tamper-evident trail. Smart risk scoring observes alongside your policies.",
-  // Icons come from the file conventions: app/icon.svg, app/favicon.ico, app/apple-icon.png.
+  metadataBase: new URL(SITE_URL),
+  title: { default: HOME_TITLE, template: "%s · Abeyance" },
+  description: HOME_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", siteName: "Abeyance", locale: "en_AU", url: "/", title: HOME_TITLE, description: HOME_DESCRIPTION },
+  twitter: { card: "summary_large_image", title: HOME_TITLE, description: HOME_DESCRIPTION },
+  // Icons and the social image come from file conventions in app/.
 };
 
 export const viewport: Viewport = {

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, type LegalSection } from "@/components/legal/LegalLayout";
 import { ABN, ADDRESS, COMPANY, CONTACT_EMAIL, GOVERNING_LAW, Placeholder } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Terms of Service",
-  description: "Draft terms for organisations using Abeyance, the commit control for AI agents. Business customers only.",
-};
+  description:
+    "Draft terms for organisations using Abeyance, the commit control for AI agents. Business customers only.",
+  path: "/legal/terms",
+});
 
 const SECTIONS: LegalSection[] = [
   {

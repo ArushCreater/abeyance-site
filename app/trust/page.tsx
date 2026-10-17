@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { DocList } from "@/components/legal/DocList";
 import { DraftBanner } from "@/components/legal/DraftBanner";
 import { LEGAL_DOCS, TRUST_PAGES, type LegalDoc } from "@/lib/legal";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Trust centre",
   description:
     "Security, subprocessors, data processing, responsible AI, vulnerability disclosure and the honest status of Abeyance’s certifications.",
-};
+  path: "/trust",
+});
 
 const pick = (list: LegalDoc[], hrefs: string[]) => hrefs.map((h) => list.find((d) => d.href === h)).filter((d): d is LegalDoc => !!d);
 

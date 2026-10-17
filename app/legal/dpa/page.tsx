@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, LegalTable, type LegalSection } from "@/components/legal/LegalLayout";
 import { COMPANY, PRIVACY_EMAIL, Placeholder, SECURITY_EMAIL } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Data Processing Addendum",
   description:
     "Draft Data Processing Addendum for Abeyance customers: roles, instructions, security measures, subprocessors, breach notification, transfers and deletion.",
-};
+  path: "/legal/dpa",
+});
 
 const SECTIONS: LegalSection[] = [
   {

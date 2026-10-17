@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, LegalTable, type LegalSection } from "@/components/legal/LegalLayout";
 import { ABN, ADDRESS, COMPANY, EU_REP, PRIVACY_EMAIL, Placeholder } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Privacy Policy",
   description:
     "How Abeyance handles personal information under the Australian Privacy Act and the APPs, the GDPR and the CCPA. This site sets no cookies and runs no analytics.",
-};
+  path: "/legal/privacy",
+});
 
 const SECTIONS: LegalSection[] = [
   {

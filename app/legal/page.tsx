@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { DocList } from "@/components/legal/DocList";
 import { DraftBanner } from "@/components/legal/DraftBanner";
 import { LEGAL_DOCS, TRUST_PAGES } from "@/lib/legal";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Legal",
-  description: "Abeyance’s terms, privacy policy, data processing addendum, acceptable use, subprocessors, cookies, pilot terms and vulnerability disclosure policy.",
-};
+  description:
+    "Abeyance’s terms, privacy policy, data processing addendum, acceptable use, subprocessors, cookies, pilot terms and vulnerability disclosure policy.",
+  path: "/legal",
+});
 
 export default function LegalIndexPage() {
   return (

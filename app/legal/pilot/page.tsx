@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, type LegalSection } from "@/components/legal/LegalLayout";
 import { CONTACT_EMAIL, Placeholder } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Design Partner and Pilot Terms",
-  description: "The short, plain terms for an Abeyance design partnership or pilot: shadow mode first, no SLA, confidentiality and deletion at the end.",
-};
+  description:
+    "The short, plain terms for an Abeyance design partnership or pilot: shadow mode first, no SLA, confidentiality and deletion at the end.",
+  path: "/legal/pilot",
+});
 
 const SECTIONS: LegalSection[] = [
   {

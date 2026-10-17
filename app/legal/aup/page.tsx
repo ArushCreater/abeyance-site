@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, type LegalSection } from "@/components/legal/LegalLayout";
 import { CONTACT_EMAIL, SECURITY_EMAIL } from "@/components/legal/Placeholder";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Acceptable Use Policy",
-  description: "What organisations and their AI agents may not use Abeyance to do.",
-};
+  description:
+    "What organisations and their AI agents may not use Abeyance to do.",
+  path: "/legal/aup",
+});
 
 const SECTIONS: LegalSection[] = [
   {

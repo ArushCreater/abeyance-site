@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/social";
 import Link from "next/link";
 import { LegalLayout, LegalTable, type LegalSection } from "@/components/legal/LegalLayout";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Cookies",
-  description: "This website sets no cookies and runs no analytics. The Abeyance console sets one strictly necessary session cookie.",
-};
+  description:
+    "This website sets no cookies and runs no analytics. The Abeyance console sets one strictly necessary session cookie.",
+  path: "/legal/cookies",
+});
 
 const SECTIONS: LegalSection[] = [
   {
